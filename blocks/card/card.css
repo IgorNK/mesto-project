@@ -1,0 +1,13 @@
+.card {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: max-content 80px;
+  grid-template-columns: fit-content(150px) max-content;
+  justify-content: space-between;
+  justify-items: flex-start;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  max-width: 282px;
+}

@@ -1,0 +1,16 @@
+.card__name {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 900;
+  font-style: normal;
+  color: #000;
+  margin-left: 21px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
