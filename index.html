@@ -77,15 +77,14 @@
       <p class="footer__copyright">2020 Mesto Russia</p>
     </footer>
 
-    <section class="page__form-container">
-      <form class="form-edit-profile">
-        <div class="form-edit-profile__close-button"></div>
-        <fieldset class="form-edit-profile__container">
-          <h2 class="form-edit-profile__heading">Редактировать&nbsp;профиль</h2>
-          <input class="form-edit-profile__field" type="text" name="name" , placeholder="Жак-Ив Кусто" required>
-          <input class="form-edit-profile__field" type="text" name="description" , placeholder="Исследователь океана"
-            required>
-          <input class="form-edit-profile__button" type=submit value="Сохранить">
+    <section class="popup popup_opened">
+      <form class="popup__container">
+        <div class="popup__close-button"></div>
+        <fieldset class="form">
+          <h2 class="form__heading">Редактировать&nbsp;профиль</h2>
+          <input class="form__field" type="text" name="name" , placeholder="Жак-Ив Кусто" required>
+          <input class="form__field" type="text" name="description" , placeholder="Исследователь океана" required>
+          <input class="form__button" type=submit value="Сохранить">
         </fieldset>
       </form>
     </section>
