@@ -22,7 +22,7 @@
 
 **Страница на Github Pages**
 
-[Mesto - страница на Github.io](https://igornk.github.io/mesto/)
+[Mesto - страница на Github.io](https://igornk.github.io/mesto-project/)
 
 **Автор**
 Назиров Игорь, студент 21-Snow группы Web+
