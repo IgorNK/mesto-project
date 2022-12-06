@@ -3,3 +3,9 @@
   margin-right: auto;
   margin-top: 50px;
 }
+
+@media screen and (max-width: 715px) {
+  .page__cards {
+    margin-top: 36px;
+  }
+}

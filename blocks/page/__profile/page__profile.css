@@ -3,3 +3,9 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+@media screen and (max-width: 715px) {
+  .page__profile {
+    margin-top: 42px;
+  }
+}

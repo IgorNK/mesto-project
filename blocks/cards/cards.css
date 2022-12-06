@@ -3,10 +3,22 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, min-content);
-  grid-auto-flow: row;
-  grid-auto-rows: min-content;
+
+  justify-content: center;
   column-gap: 17px;
   row-gap: 20px;
   width: 100%;
   max-width: 880px;
+}
+
+@media screen and (max-width: 899px) {
+  .cards {
+    grid-template-columns: repeat(2, min-content);
+  }
+}
+
+@media screen and (max-width: 715px) {
+  .cards {
+    grid-template-columns: min-content;
+  }
 }

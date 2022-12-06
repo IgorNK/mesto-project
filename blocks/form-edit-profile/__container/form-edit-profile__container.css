@@ -1,0 +1,16 @@
+.form-edit-profile__container {
+  margin: 0;
+  padding: 34px 36px 37px;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+@media screen and (max-width: 715px) {
+  .form-edit-profile__container {
+    padding: 25px 22px;
+  }
+}

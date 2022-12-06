@@ -8,3 +8,11 @@
   font-weight: 400;
   font-style: normal;
 }
+
+@media screen and (max-width: 715px) {
+  .profile__description {
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+  }
+}

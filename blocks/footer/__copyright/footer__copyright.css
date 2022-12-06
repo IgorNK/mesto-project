@@ -12,3 +12,9 @@
 .footer__copyright::before {
   content: '\00a9 \00a0';
 }
+
+@media screen and (max-width: 899px) {
+  .footer__copyright {
+    padding-left: 19px;
+  }
+}

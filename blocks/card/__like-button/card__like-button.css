@@ -12,4 +12,14 @@
   width: 22px;
   height: 19px;
   margin-right: 20px;
+  transition: opacity 0.2s linear;
+}
+
+.card__like-button:hover {
+  opacity: 0.5;
+}
+
+.card__like-button:active {
+  opacity: 1;
+  background-image: url(../../../images/like-icon_active.svg);
 }

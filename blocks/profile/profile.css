@@ -6,6 +6,22 @@
   row-gap: 26px;
   grid-template-columns: 120px max-content 1fr;
   align-items: center;
+  justify-content: center;
+  justify-items: center;
   width: 100%;
   max-width: 880px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 899px) {
+  .profile {
+    padding-left: 27px;
+    padding-right: 27px;
+  }
+}
+
+@media screen and (max-width: 715px) {
+  .profile {
+    grid-template-columns: max-content;
+  }
 }

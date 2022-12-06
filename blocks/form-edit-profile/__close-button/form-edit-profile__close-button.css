@@ -1,0 +1,28 @@
+.form-edit-profile__close-button {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background-image: url(../../../images/close-icon.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  right: -40px;
+  top: -40px;
+  transition: opacity 0.2s linear;
+  cursor: pointer;
+}
+
+.form-edit-profile__close-button:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 715px) {
+  .form-edit-profile__close-button {
+    width: 20px;
+    height: 20px;
+    top: -36px;
+    right: 0;
+  }
+}

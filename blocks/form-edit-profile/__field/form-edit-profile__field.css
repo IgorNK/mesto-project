@@ -1,0 +1,14 @@
+.form-edit-profile__field {
+  margin: 0;
+  padding: 0;
+  margin-top: 30px;
+  padding-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  font-style: normal;
+  color: #000;
+}

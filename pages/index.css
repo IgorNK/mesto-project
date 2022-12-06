@@ -38,10 +38,24 @@
 @import url(../blocks/footer/__copyright/footer__copyright.css);
 /* ====================== */
 
+/* ===Form Edit Profile== */
+@import url(../blocks/form-edit-profile/form-edit-profile.css);
+@import url(../blocks/form-edit-profile/__heading/form-edit-profile__heading.css);
+@import url(../blocks/form-edit-profile/__container/form-edit-profile__container.css);
+@import url(../blocks/form-edit-profile/__field/form-edit-profile__field.css);
+@import url(../blocks/form-edit-profile/__button/form-edit-profile__button.css);
+@import url(../blocks/form-edit-profile/__close-button/form-edit-profile__close-button.css);
+/* ====================== */
+
+/* =======Overlay======== */
+@import url(../blocks/overlay/overlay.css);
+/* ====================== */
+
 /* =======Page=========== */
 @import url(../blocks/page/page.css);
 @import url(../blocks/page/__header/page__header.css);
 @import url(../blocks/page/__profile/page__profile.css);
 @import url(../blocks/page/__cards/page__cards.css);
 @import url(../blocks/page/__footer/page__footer.css);
+@import url(../blocks/page/__form-container/page__form-container.css);
 /* ====================== */

@@ -6,3 +6,9 @@
   max-width: 880px;
   border-bottom: 1px #545454 solid;
 }
+
+@media screen and (max-width: 715px) {
+  .header {
+    padding-bottom: 26px;
+  }
+}
