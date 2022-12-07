@@ -2,9 +2,9 @@
   margin: 0;
   padding: 0;
   padding-bottom: 36px;
-  width: 100%;
+  width: calc(100% - 54px);
   max-width: 880px;
-  border-bottom: 1px #545454 solid;
+  /* border-bottom: 1px #545454 solid; */
 }
 
 @media screen and (max-width: 715px) {

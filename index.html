@@ -21,52 +21,54 @@
 
     <main class="content">
 
+      <div class="content__divider"></div>
+
       <section class="profile page__profile">
         <img class="profile__image" src="./images/cousteau.jpg" alt="Изображение профиля">
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
-          <button class="profile__edit-button"></button>
+          <button class="profile__edit-button" type=button></button>
           <p class="profile__description">Исследователь океана</p>
         </div>
-        <button class="profile__add-button"></button>
+        <button class="profile__add-button" type=button></button>
       </section>
 
       <section class="cards page__cards">
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаевск">
-          <p class="card__name">Карачаевск</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Карачаевск</h2>
+          <button class="card__like-button card__like-button_active" type=button></button>
+        </article>
 
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1404681-unsplash.jpg" alt="Гора Эльбрус">
-          <p class="card__name">Гора Эльбрус</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Гора Эльбрус</h2>
+          <button class="card__like-button" type=button></button>
+        </article>
 
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
-          <p class="card__name">Домбай</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Домбай</h2>
+          <button class="card__like-button" type=button></button>
+        </article>
 
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1404681-unsplash.jpg" alt="Гора Эльбрус">
-          <p class="card__name">Гора Эльбрус</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Гора Эльбрус</h2>
+          <button class="card__like-button" type=button></button>
+        </article>
 
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
-          <p class="card__name">Домбай</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Домбай</h2>
+          <button class="card__like-button" type=button></button>
+        </article>
 
-        <div class="card">
+        <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаево-Черкессия">
-          <p class="card__name">Карачаево-Черкессия</p>
-          <button class="card__like-button"></button>
-        </div>
+          <h2 class="card__name">Карачаево-Черкессия</h2>
+          <button class="card__like-button" type=button></button>
+        </article>
       </section>
       <!-- Cards end -->
 
@@ -77,17 +79,17 @@
       <p class="footer__copyright">2020 Mesto Russia</p>
     </footer>
 
-    <section class="popup popup_opened">
-      <form class="popup__container">
-        <div class="popup__close-button"></div>
-        <fieldset class="form">
-          <h2 class="form__heading">Редактировать&nbsp;профиль</h2>
-          <input class="form__field" type="text" name="name" placeholder="Жак-Ив Кусто" required>
-          <input class="form__field" type="text" name="description" placeholder="Исследователь океана" required>
+    <div class="popup">
+      <div class="popup__container">
+        <div class="popup__close-button" type=button></div>
+        <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
+        <form class="form" name="profile-edit">
+          <input class="form__field" type="text" name="name" placeholder="Введите имя" required>
+          <input class="form__field" type="text" name="description" placeholder="Чем Вы занимаетесь?" required>
           <input class="form__button" type=submit value="Сохранить">
-        </fieldset>
-      </form>
-    </section>
+        </form>
+      </div>
+    </div>
 
 
   </div>

@@ -13,8 +13,8 @@
   content: '\00a9 \00a0';
 }
 
-@media screen and (max-width: 899px) {
+/* @media screen and (max-width: 899px) {
   .footer__copyright {
     padding-left: 19px;
   }
-}
+} */
