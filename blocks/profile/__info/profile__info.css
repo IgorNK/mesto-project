@@ -13,5 +13,6 @@
   .profile__info {
     column-gap: 10px;
     row-gap: 5px;
+    max-width: 80%;
   }
 }

@@ -4,7 +4,7 @@
   display: grid;
   column-gap: 30px;
   row-gap: 26px;
-  grid-template-columns: 120px 1fr 1fr;
+  grid-template-columns: 120px 1fr min-content;
   align-items: center;
   justify-content: center;
   justify-items: start;
@@ -12,13 +12,6 @@
   max-width: 880px;
   box-sizing: border-box;
 }
-
-/* @media screen and (max-width: 899px) {
-  .profile {
-    padding-left: 27px;
-    padding-right: 27px;
-  }
-} */
 
 @media screen and (max-width: 715px) {
   .profile {
