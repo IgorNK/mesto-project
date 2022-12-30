@@ -49,6 +49,7 @@
 
 /* =======Form=========== */
 @import url(../blocks/form/form.css);
+@import url(../blocks/form/_hidden/form_hidden.css);
 @import url(../blocks/form/__field/form__field.css);
 @import url(../blocks/form/__button/form__button.css);
 /* ====================== */

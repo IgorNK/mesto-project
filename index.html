@@ -32,7 +32,7 @@
       </section>
 
       <section class="cards page__cards" aria-label="Содержимое страницы">
-        <article class="card">
+        <!-- <article class="card">
           <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаевск">
           <h2 class="card__name">Карачаевск</h2>
           <button class="card__like-button card__like-button_active" type=button></button>
@@ -66,7 +66,7 @@
           <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаево-Черкессия">
           <h2 class="card__name">Карачаево-Черкессия</h2>
           <button class="card__like-button" type=button></button>
-        </article>
+        </article> -->
       </section>
       <!-- Cards end -->
 
@@ -80,20 +80,33 @@
     <div class="popup">
       <div class="popup__container">
         <button class="popup__close-button" type=button></button>
-        <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
-        <form class="form" name="profile-edit">
-          <input class="form__field" type="text" name="name" placeholder="Введите имя" required>
-          <input class="form__field" type="text" name="description" placeholder="Чем Вы занимаетесь?" required>
-          <input class="form__button" type=submit value="Сохранить">
+        <h2 class="popup__heading">Заголовок&nbsp;формы</h2>
+        <form class="form form_profile-edit form_hidden" name="profile-edit">
+          <input class="form__field form__field_name" type="text" name="name" placeholder="Введите имя" required>
+          <input class="form__field form__field_description" type="text" name="description"
+            placeholder="Чем Вы занимаетесь?" required>
+          <input class="form__button form__button_profile-save" type=submit value="Сохранить">
+        </form>
+        <form class="form form_add-place form_hidden" name="add-place">
+          <input class="form__field form__field_title" type="text" name="title" placeholder="Название" required>
+          <input class="form__field form__field_link" type="text" name="link" placeholder="Ссылка на картинку" required>
+          <input class="form__button form__button_add-place" type=submit value="Создать">
         </form>
       </div>
     </div>
 
+    <template id="card-template">
+      <article class="card">
+        <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
+        <h2 class="card__name">Домбай</h2>
+        <button class="card__like-button" type=button></button>
+      </article>
+    </template>
 
   </div>
   <!-- Page end -->
 
-
+  <script src="./script.js"></script>
 </body>
 
 </html>
