@@ -25,10 +25,10 @@
         <img class="profile__image" src="./images/cousteau.jpg" alt="Изображение профиля">
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
-          <button class="profile__edit-button" type=button></button>
+          <button class="profile__edit-button" type="button"></button>
           <p class="profile__description">Исследователь океана</p>
         </div>
-        <button class="profile__add-button" type=button></button>
+        <button class="profile__add-button" type="button"></button>
       </section>
 
       <section class="cards page__cards" aria-label="Содержимое страницы">
@@ -79,34 +79,37 @@
 
     <div class="popup">
       <div class="popup__container">
-        <button class="popup__close-button" type=button></button>
-        <h2 class="popup__heading">Заголовок&nbsp;формы</h2>
-        <form class="form form_profile-edit form_hidden" name="profile-edit">
+        <button class="popup__close-button" type="button"></button>
+        <form class="form form_type_profile-edit form_hidden" name="profile-edit">
+          <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
           <input class="form__field form__field_name" type="text" name="name" placeholder="Введите имя" required>
           <input class="form__field form__field_description" type="text" name="description"
             placeholder="Чем Вы занимаетесь?" required>
           <input class="form__button form__button_profile-save" type=submit value="Сохранить">
         </form>
-        <form class="form form_add-place form_hidden" name="add-place">
+        <form class="form form_type_add-place form_hidden" name="add-place">
+          <h2 class="popup__heading">Добавить&nbsp;место</h2>
           <input class="form__field form__field_title" type="text" name="title" placeholder="Название" required>
           <input class="form__field form__field_link" type="text" name="link" placeholder="Ссылка на картинку" required>
           <input class="form__button form__button_add-place" type=submit value="Создать">
         </form>
+        <img class="form form_type_image form_hidden" src="">
       </div>
     </div>
 
     <template id="card-template">
       <article class="card">
-        <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
-        <h2 class="card__name">Домбай</h2>
-        <button class="card__like-button" type=button></button>
+        <img class="card__image" src="" alt="">
+        <h2 class="card__name"></h2>
+        <button class="card__like-button" type="button"></button>
+        <button class="card__delete-button" type="button"></button>
       </article>
     </template>
 
   </div>
   <!-- Page end -->
 
-  <script src="./script.js"></script>
+  <script type="module" src="./script.js"></script>
 </body>
 
 </html>

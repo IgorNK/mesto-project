@@ -1,10 +1,18 @@
 .form {
   margin: 0;
-  padding: 0;
+  padding: 34px 36px 37px;
+  width: 430px;
   background-color: transparent;
   border: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+}
+
+@media screen and (max-width: 715px) {
+  .form {
+    width: 282px;
+    padding: 25px 22px;
+  }
 }

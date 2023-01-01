@@ -1,57 +1,32 @@
 'use strict';
-
+// ****** Imports ******* //
+import { initialCards } from './data.js';
+// ****** Form show-up buttons ****** //
 const profileEditButton = document.querySelector('.profile__edit-button');
 const placeAddButton = document.querySelector('.profile__add-button');
-
+// ****** Modal window elements ****** //
 const popup = document.querySelector('.popup');
 const popupCloseButton = popup.querySelector('.popup__close-button');
-
-const profileEditForm = document.querySelector('.form_profile-edit');
+// ****** Forms ****** //
+// ** Profile Edit form ** //
+const profileEditForm = document.querySelector('.form_type_profile-edit');
 const profileNameField = document.querySelector('.form__field_name');
 const profileDescriptionField = document.querySelector(
   '.form__field_description'
 );
-
-const addPlaceForm = document.querySelector('.form_add-place');
+// ** Add Place form ** //
+const addPlaceForm = document.querySelector('.form_type_add-place');
 const placeTitleField = document.querySelector('.form__field_title');
 const placeLinkField = document.querySelector('.form__field_link');
-
+// ** Image pseudo-form ** //
+const popupImage = popup.querySelector('.form_type_image');
+// ****** Profile info on page ****** //
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
-
-const profileEditFormTitle = 'Редактировать\xa0Профиль';
-const addPlaceFormTitle = 'Добавить\xa0Место';
-
+// ****** Places container on page ****** //
 const placesContainer = document.querySelector('.cards');
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
-
-initialize();
+assignInput();
 
 updateFormData();
 
@@ -61,39 +36,50 @@ function addInitialCards() {
   initialCards.forEach((card) => addPlace(createPlace(card.name, card.link)));
 }
 
-function initialize() {
-  profileEditButton.addEventListener('click', showProfileEditForm);
-  placeAddButton.addEventListener('click', showPlaceAddForm);
+function assignInput() {
+  profileEditButton.addEventListener('click', () => {
+    showForm(profileEditForm);
+    showPopup();
+  });
+
+  placeAddButton.addEventListener('click', () => {
+    showForm(addPlaceForm);
+    showPopup();
+  });
 
   popupCloseButton.addEventListener('click', hidePopup);
 
   profileEditForm.addEventListener('submit', (evt) => {
-    handleUpdateProfileButton(evt);
+    evt.preventDefault();
+    handleUpdateProfileButton();
     hidePopup();
   });
 
   addPlaceForm.addEventListener('submit', (evt) => {
-    handleAddPlaceButton(evt);
+    evt.preventDefault();
+    handleAddPlaceButton();
     hidePopup();
   });
 }
 
-function showPopup(title) {
+function showPopup() {
+  console.log('showing popup');
   popup.classList.add('popup_opened');
-  const popupHeading = popup.querySelector('.popup__heading');
-  popupHeading.textContent = title;
 }
 
 function hidePopup() {
+  console.log('hiding popup');
   popup.classList.remove('popup_opened');
 }
 
 function showForm(form) {
+  console.log('showing form');
   clearForms();
   form.classList.remove('form_hidden');
 }
 
 function hideForm(form) {
+  console.log('hiding form');
   form.classList.add('form_hidden');
 }
 
@@ -102,24 +88,12 @@ function clearForms() {
   forms.forEach((form) => hideForm(form));
 }
 
-function showProfileEditForm() {
-  showForm(profileEditForm);
-  showPopup(profileEditFormTitle);
-}
-
-function showPlaceAddForm() {
-  showForm(addPlaceForm);
-  showPopup(addPlaceFormTitle);
-}
-
 function updateFormData() {
   profileNameField.value = profileName.textContent;
   profileDescriptionField.value = profileDescription.textContent;
 }
 
-function handleUpdateProfileButton(evt) {
-  evt.preventDefault();
-
+function handleUpdateProfileButton() {
   const newName = profileNameField.value;
   const newDescription = profileDescriptionField.value;
   updateProfileData(newName, newDescription);
@@ -130,9 +104,7 @@ function updateProfileData(newName, newDescription) {
   profileDescription.textContent = newDescription;
 }
 
-function handleAddPlaceButton(evt) {
-  evt.preventDefault();
-
+function handleAddPlaceButton() {
   const title = placeTitleField.value;
   const link = placeLinkField.value;
   addPlace(createPlace(title, link));
@@ -144,6 +116,7 @@ function createPlace(title, link) {
   const placeTitleElement = placeElement.querySelector('.card__name');
   const placeImageElement = placeElement.querySelector('.card__image');
   const placeLikeButton = placeElement.querySelector('.card__like-button');
+  const placeDeleteButton = placeElement.querySelector('.card__delete-button');
 
   placeTitleElement.textContent = title;
   placeImageElement.src = link;
@@ -153,9 +126,31 @@ function createPlace(title, link) {
     placeLikeButton.classList.toggle('card__like-button_active')
   );
 
+  placeDeleteButton.addEventListener('click', () => {
+    deletePlace(placeElement);
+  });
+
+  placeImageElement.addEventListener('click', () => {
+    showFullImage(link);
+  });
+
   return placeElement;
 }
 
 function addPlace(placeElement) {
   placesContainer.append(placeElement);
+}
+
+function deletePlace(placeElement) {
+  if (placesContainer.contains(placeElement)) {
+    placesContainer.removeChild(placeElement);
+  } else {
+    console.log('EXCEPTION: trying to delete non-existing card');
+  }
+}
+
+function showFullImage(link) {
+  popupImage.src = link;
+  showForm(popupImage);
+  showPopup();
 }
