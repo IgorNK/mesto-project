@@ -19,6 +19,7 @@
 - Статическая разметка HTML
 - Формы HTML
 - CSS
+- Javascript
 
 **Страница на Github Pages**
 

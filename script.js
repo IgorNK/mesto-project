@@ -28,7 +28,7 @@ const placesContainer = document.querySelector('.cards');
 
 assignInput();
 
-updateFormData();
+initFormData();
 
 addInitialCards();
 
@@ -88,7 +88,7 @@ function clearForms() {
   forms.forEach((form) => hideForm(form));
 }
 
-function updateFormData() {
+function initFormData() {
   profileNameField.value = profileName.textContent;
   profileDescriptionField.value = profileDescription.textContent;
 }
