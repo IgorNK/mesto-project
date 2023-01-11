@@ -25,6 +25,8 @@ const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 // ****** Places container on page ****** //
 const placesContainer = document.querySelector('.cards');
+// ****** Places card template ****** //
+const placeTemplate = document.querySelector('#card-template').content;
 
 assignInput();
 
@@ -111,7 +113,6 @@ function handleAddPlaceButton() {
 }
 
 function createPlace(title, link) {
-  const placeTemplate = document.querySelector('#card-template').content;
   const placeElement = placeTemplate.querySelector('.card').cloneNode(true);
   const placeTitleElement = placeElement.querySelector('.card__name');
   const placeImageElement = placeElement.querySelector('.card__image');
