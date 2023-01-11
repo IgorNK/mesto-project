@@ -65,23 +65,19 @@ function assignInput() {
 }
 
 function showPopup() {
-  console.log('showing popup');
   popup.classList.add('popup_opened');
 }
 
 function hidePopup() {
-  console.log('hiding popup');
   popup.classList.remove('popup_opened');
 }
 
 function showForm(form) {
-  console.log('showing form');
   clearForms();
   form.classList.remove('form_hidden');
 }
 
 function hideForm(form) {
-  console.log('hiding form');
   form.classList.add('form_hidden');
 }
 
