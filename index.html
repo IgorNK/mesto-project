@@ -77,23 +77,35 @@
       <p class="footer__copyright">2020 Mesto Russia</p>
     </footer>
 
-    <div class="popup">
+    <div class="popup popup__for_profile-edit">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <form class="form form_type_profile-edit form_hidden" name="profile-edit">
+        <form class="form form_type_profile-edit" name="profile-edit">
           <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
           <input class="form__field form__field_name" type="text" name="name" placeholder="Введите имя" required>
           <input class="form__field form__field_description" type="text" name="description"
             placeholder="Чем Вы занимаетесь?" required>
           <input class="form__button form__button_profile-save" type=submit value="Сохранить">
         </form>
-        <form class="form form_type_add-place form_hidden" name="add-place">
+      </div>
+    </div>
+
+    <div class="popup popup__for_add-place">
+      <div class="popup__container">
+        <button class="popup__close-button" type="button"></button>
+        <form class="form form_type_add-place" name="add-place">
           <h2 class="popup__heading">Добавить&nbsp;место</h2>
           <input class="form__field form__field_title" type="text" name="title" placeholder="Название" required>
           <input class="form__field form__field_link" type="text" name="link" placeholder="Ссылка на картинку" required>
           <input class="form__button form__button_add-place" type=submit value="Создать">
         </form>
-        <img class="form form_type_image form_hidden" src="">
+      </div>
+    </div>
+
+    <div class="popup popup__for_image">
+      <div class="popup__container">
+        <button class="popup__close-button" type="button"></button>
+        <img class="form form_type_image" src="">
       </div>
     </div>
 

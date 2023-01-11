@@ -4,22 +4,26 @@ import { initialCards } from './data.js';
 // ****** Form show-up buttons ****** //
 const profileEditButton = document.querySelector('.profile__edit-button');
 const placeAddButton = document.querySelector('.profile__add-button');
-// ****** Modal window elements ****** //
-const popup = document.querySelector('.popup');
-const popupCloseButton = popup.querySelector('.popup__close-button');
+// ****** Popups ****** //
+const popupProfileEdit = document.querySelector('.popup__for_profile-edit');
+const popupAddPlace = document.querySelector('.popup__for_add-place');
+const popupImage = document.querySelector('.popup__for_image');
+const popupCloseButtons = document.querySelectorAll('.popup__close-button');
 // ****** Forms ****** //
 // ** Profile Edit form ** //
-const profileEditForm = document.querySelector('.form_type_profile-edit');
-const profileNameField = document.querySelector('.form__field_name');
-const profileDescriptionField = document.querySelector(
+const profileEditForm = popupProfileEdit.querySelector(
+  '.form_type_profile-edit'
+);
+const profileNameField = popupProfileEdit.querySelector('.form__field_name');
+const profileDescriptionField = popupProfileEdit.querySelector(
   '.form__field_description'
 );
 // ** Add Place form ** //
-const addPlaceForm = document.querySelector('.form_type_add-place');
-const placeTitleField = document.querySelector('.form__field_title');
-const placeLinkField = document.querySelector('.form__field_link');
-// ** Image pseudo-form ** //
-const popupImage = popup.querySelector('.form_type_image');
+const addPlaceForm = popupAddPlace.querySelector('.form_type_add-place');
+const placeTitleField = popupAddPlace.querySelector('.form__field_title');
+const placeLinkField = popupAddPlace.querySelector('.form__field_link');
+// ** Image form ** //
+const popupImageElement = popupImage.querySelector('.form_type_image');
 // ****** Profile info on page ****** //
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
@@ -40,50 +44,39 @@ function addInitialCards() {
 
 function assignInput() {
   profileEditButton.addEventListener('click', () => {
-    showForm(profileEditForm);
-    showPopup();
+    showPopup(popupProfileEdit);
   });
 
   placeAddButton.addEventListener('click', () => {
-    showForm(addPlaceForm);
-    showPopup();
+    showPopup(popupAddPlace);
   });
 
-  popupCloseButton.addEventListener('click', hidePopup);
+  popupCloseButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const popup = button.closest('.popup');
+      hidePopup(popup);
+    });
+  });
 
   profileEditForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     handleUpdateProfileButton();
-    hidePopup();
+    hidePopup(popupProfileEdit);
   });
 
   addPlaceForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     handleAddPlaceButton();
-    hidePopup();
+    hidePopup(popupAddPlace);
   });
 }
 
-function showPopup() {
+function showPopup(popup) {
   popup.classList.add('popup_opened');
 }
 
-function hidePopup() {
+function hidePopup(popup) {
   popup.classList.remove('popup_opened');
-}
-
-function showForm(form) {
-  clearForms();
-  form.classList.remove('form_hidden');
-}
-
-function hideForm(form) {
-  form.classList.add('form_hidden');
-}
-
-function clearForms() {
-  const forms = popup.querySelectorAll('.form');
-  forms.forEach((form) => hideForm(form));
 }
 
 function initFormData() {
@@ -147,7 +140,6 @@ function deletePlace(placeElement) {
 }
 
 function showFullImage(link) {
-  popupImage.src = link;
-  showForm(popupImage);
-  showPopup();
+  popupImageElement.src = link;
+  showPopup(popupImage);
 }
