@@ -1,6 +1,5 @@
-.form_type_image {
+.popup__image {
   padding: 0;
   max-width: 75vw;
   max-height: 75vh;
-  width: 100%;
 }

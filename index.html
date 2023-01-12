@@ -80,7 +80,7 @@
     <div class="popup popup__for_profile-edit">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <form class="form form_type_profile-edit" name="profile-edit">
+        <form class="form" name="profile-edit">
           <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
           <input class="form__field form__field_name" type="text" name="name" placeholder="Введите имя" required>
           <input class="form__field form__field_description" type="text" name="description"
@@ -93,7 +93,7 @@
     <div class="popup popup__for_add-place">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <form class="form form_type_add-place" name="add-place">
+        <form class="form" name="add-place">
           <h2 class="popup__heading">Добавить&nbsp;место</h2>
           <input class="form__field form__field_title" type="text" name="title" placeholder="Название" required>
           <input class="form__field form__field_link" type="text" name="link" placeholder="Ссылка на картинку" required>
@@ -105,7 +105,8 @@
     <div class="popup popup__for_image">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <img class="form form_type_image" src="">
+        <img class="popup__image" src="">
+        <figcaption class="popup__image-caption"></figcaption>
       </div>
     </div>
 
@@ -121,7 +122,7 @@
   </div>
   <!-- Page end -->
 
-  <script type="module" src="./script.js"></script>
+  <script type="module" src="./scripts/script.js"></script>
 </body>
 
 </html>
