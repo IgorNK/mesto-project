@@ -1,0 +1,38 @@
+.profile__avatar-edit-button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  position: relative;
+  background-image: url(../../../images/cousteau.jpg);
+  background-blend-mode: darken;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transition: background-color 0.2s linear;
+}
+
+.profile__avatar-edit-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.profile__avatar-edit-button::after {
+  display: block;
+  content: '';
+  width: 100%;
+  aspect-ratio: 1;
+  background: url(../../../images/edit-icon.svg);
+  background-position: center;
+  background-size: 26px 26px;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+.profile__avatar-edit-button:hover::after {
+  opacity: 1;
+}

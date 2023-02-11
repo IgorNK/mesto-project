@@ -10,6 +10,7 @@
   align-items: stretch;
   background-color: #fff;
   border-radius: 10px;
+  cursor: default;
 }
 
 @media screen and (max-width: 715px) {
