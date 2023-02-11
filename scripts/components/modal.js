@@ -94,7 +94,6 @@ function addEscapeListener(popup) {
     'keydown',
     (keyDownCallback = function (evt) {
       if (evt.key === 'Escape') {
-        console.log('Escape!');
         document.activeElement.blur();
         hidePopup(popup);
       }

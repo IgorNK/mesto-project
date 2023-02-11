@@ -1,5 +1,6 @@
 'use strict';
 // ** IMPORTS ** //
+import '../../pages/index.css';
 import { initialCards } from './data.js';
 import { createPlace, addPlace } from './cards.js';
 import {
