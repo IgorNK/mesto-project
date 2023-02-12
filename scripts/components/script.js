@@ -2,41 +2,31 @@
 // ** IMPORTS ** //
 import '../../pages/index.css';
 import { initialCards } from './data.js';
-import { createPlace, addPlace } from './cards.js';
-import {
-  enableForms,
-  showPopup,
-  hidePopup,
-  popupAddPlace,
-  popupAvatarEdit,
-  popupProfileEdit,
-} from './modal.js';
-import { enableValidation } from './validate.js';
-
-// ** GLOBALS ** //
-//---------------//
-// ****** Form show-up buttons ****** //
-const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
-const profileEditButton = document.querySelector('.profile__edit-button');
-const placeAddButton = document.querySelector('.profile__add-button');
-// ****** Profile info on page ****** //
+import { createPlace, addPlace } from './cards.js'; // Used for adding initial cards
+import { forms, enableForms, showPopup, hidePopup } from './modal.js';
+import { enableValidation, checkInputValidity } from './validate.js';
 
 function addInitialCards() {
   initialCards.forEach((card) => addPlace(createPlace(card.name, card.link)));
 }
 
 function addEventListeners() {
+  const avatarEditButton = document.querySelector(
+    '.profile__avatar-edit-button'
+  );
   avatarEditButton.addEventListener('click', () => {
-    showPopup(popupAvatarEdit);
+    showPopup(forms.avatarEdit.popup);
   });
 
+  const profileEditButton = document.querySelector('.profile__edit-button');
   profileEditButton.addEventListener('click', () => {
     fetchProfileEditFormInputs();
-    showPopup(popupProfileEdit);
+    showPopup(forms.profileEdit.popup);
   });
 
+  const placeAddButton = document.querySelector('.profile__add-button');
   placeAddButton.addEventListener('click', () => {
-    showPopup(popupAddPlace);
+    showPopup(forms.addPlace.popup);
   });
 
   document.addEventListener('click', (evt) => {
@@ -48,18 +38,20 @@ function addEventListeners() {
 }
 
 function fetchProfileEditFormInputs() {
-  const profileEditForm = document.forms['profile-edit'];
-  const profileNameField = profileEditForm.elements['name'];
-  const profileDescriptionField = profileEditForm.elements['description'];
+  const profileEditForm = forms.profileEdit.form;
+  const profileNameField = forms.profileEdit.fields.name;
+  const profileDescriptionField = forms.profileEdit.fields.description;
   const profileName = document.querySelector('.profile__name');
   const profileDescription = document.querySelector('.profile__description');
   profileNameField.value = profileName.textContent;
   profileDescriptionField.value = profileDescription.textContent;
+  checkInputValidity(profileEditForm, profileNameField);
+  checkInputValidity(profileEditForm, profileDescriptionField);
 }
 
 addEventListeners();
 
-enableForms();
+enableForms(forms);
 
 enableValidation();
 

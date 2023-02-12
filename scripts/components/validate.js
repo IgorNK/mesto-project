@@ -1,19 +1,19 @@
 // ** IMPORTS ** //
 //---------------//
+import { forms } from './modal.js';
 import { getErrorElement } from './utils.js';
 
 // ** VALIDITY CHECKING ** //
 //-------------------------//
 
 function enableValidation() {
-  const formList = Array.from(document.querySelectorAll('.form'));
-  formList.forEach((form) => {
-    // Prevent default page reload on submit for each form
-    form.addEventListener('submit', (e) => {
+  for (const formName in forms) {
+    const formObj = forms[formName];
+    formObj.form.addEventListener('submit', (e) => {
       e.preventDefault();
     });
-    addFieldInputListeners(form);
-  });
+    addFieldInputListeners(formObj);
+  }
 }
 
 function checkInputValidity(form, field) {
@@ -40,9 +40,10 @@ function hasInvalidInput(fields) {
 
 // ** EVENT LISTENING ** //
 //-----------------------//
-function addFieldInputListeners(form) {
-  const fields = Array.from(form.querySelectorAll('.form__field'));
-  const button = form.querySelector('.form__button');
+function addFieldInputListeners(formObj) {
+  const fields = Object.values(formObj.fields);
+  const button = formObj.submit;
+  const form = formObj.form;
   toggleButtonState(button, fields);
   fields.forEach((field) => {
     field.addEventListener('input', () => {
@@ -80,4 +81,4 @@ function disableButton(button) {
 
 // ** EXPORT ** //
 //--------------//
-export { enableValidation };
+export { enableValidation, checkInputValidity, toggleButtonState };
