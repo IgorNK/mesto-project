@@ -145,20 +145,11 @@ function resetForm(formObj) {
 
 // ** This one is called from scipt.js for initialization ** //
 //-----------------------------------------------------------//
-function enableForms(forms) {
+function enableForms() {
   addFormSubmitListeners(forms);
   addCloseButtonListeners();
 }
 
 // ** EXPORT ** //
 //--------------//
-export {
-  forms,
-  enableForms,
-  showPopup,
-  hidePopup,
-  popupAddPlace,
-  popupAvatarEdit,
-  popupProfileEdit,
-  profileEditForm,
-};
+export { forms, enableForms, showPopup, hidePopup };

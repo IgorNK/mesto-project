@@ -1,3 +1,4 @@
+import { initialCards } from './data.js';
 import { showPopup } from './modal.js';
 
 // ****** Places card template ****** //
@@ -48,4 +49,8 @@ function showFullImage(link, title) {
   showPopup(popupImage);
 }
 
-export { createPlace, addPlace };
+function addInitialCards() {
+  initialCards.forEach((card) => addPlace(createPlace(card.name, card.link)));
+}
+
+export { createPlace, addPlace, addInitialCards };

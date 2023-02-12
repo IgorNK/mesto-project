@@ -1,12 +1,13 @@
 // ** IMPORTS ** //
 //---------------//
-import { forms } from './modal.js';
 import { getErrorElement } from './utils.js';
 
 // ** VALIDITY CHECKING ** //
 //-------------------------//
 
-function enableValidation() {
+// ** This one is called from scipt.js for initialization ** //
+//-----------------------------------------------------------//
+function enableValidation(forms) {
   for (const formName in forms) {
     const formObj = forms[formName];
     formObj.form.addEventListener('submit', (e) => {
@@ -18,6 +19,13 @@ function enableValidation() {
 
 function checkInputValidity(form, field) {
   if (!field.validity.valid) {
+    if (field.validity.patternMismatch) {
+      console.log('custom validity set');
+      field.setCustomValidity(field.dataset.errorMessage);
+    } else {
+      field.setCustomValidity('');
+      console.log('custom validity removed');
+    }
     showInputError(form, field, field.validationMessage);
   } else {
     hideInputError(form, field);
@@ -27,14 +35,20 @@ function checkInputValidity(form, field) {
 function toggleButtonState(button, fields) {
   if (hasInvalidInput(fields)) {
     disableButton(button);
+    // console.log('false: ' + button + ' ' + fields);
   } else {
     enableButton(button);
+    // console.log('true: ' + button + ' ' + fields);
   }
 }
 
+//This function is only used when checking button state.
+//Regular input checking is done in checkInputValidity method.
 function hasInvalidInput(fields) {
   return fields.some((field) => {
-    return !field.validity.valid;
+    if (!field.validity.valid) {
+      return true;
+    }
   });
 }
 
@@ -70,11 +84,13 @@ function hideInputError(form, field) {
 }
 
 function enableButton(button) {
+  // console.log('enabling!');
   button.disabled = false;
   button.classList.remove('form__button_inactive');
 }
 
 function disableButton(button) {
+  // console.log('disabling!');
   button.disabled = true;
   button.classList.add('form__button_inactive');
 }

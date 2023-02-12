@@ -1,14 +1,13 @@
 'use strict';
 // ** IMPORTS ** //
+//---------------//
 import '../../pages/index.css';
-import { initialCards } from './data.js';
-import { createPlace, addPlace } from './cards.js'; // Used for adding initial cards
+import { addInitialCards } from './cards.js';
 import { forms, enableForms, showPopup, hidePopup } from './modal.js';
 import { enableValidation, checkInputValidity } from './validate.js';
 
-function addInitialCards() {
-  initialCards.forEach((card) => addPlace(createPlace(card.name, card.link)));
-}
+// ** STUFF TO DO ON PAGE LOAD ** //
+//--------------------------------//
 
 function addEventListeners() {
   const avatarEditButton = document.querySelector(
@@ -49,10 +48,12 @@ function fetchProfileEditFormInputs() {
   checkInputValidity(profileEditForm, profileDescriptionField);
 }
 
-addEventListeners();
+// ** ACTUAL PAGE INITIALIZATION ** //
+//----------------------------------//
+addEventListeners(); // In this scope
 
-enableForms(forms);
+enableForms(); // Imported from ./modal.js
 
-enableValidation();
+enableValidation(forms); // Imported from ./validate.js
 
-addInitialCards();
+addInitialCards(); // Imported from ./cards.js
