@@ -10,5 +10,6 @@
   font-weight: 400;
   font-style: normal;
   color: #f00;
-  display: none;
+  visibility: hidden;
+  min-height: 30px;
 }
