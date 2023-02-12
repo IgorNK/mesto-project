@@ -20,11 +20,11 @@ function enableValidation(forms) {
 function checkInputValidity(form, field) {
   if (!field.validity.valid) {
     if (field.validity.patternMismatch) {
-      console.log('custom validity set');
+      ('custom validity set');
       field.setCustomValidity(field.dataset.errorMessage);
     } else {
       field.setCustomValidity('');
-      console.log('custom validity removed');
+      ('custom validity removed');
     }
     showInputError(form, field, field.validationMessage);
   } else {
@@ -35,10 +35,8 @@ function checkInputValidity(form, field) {
 function toggleButtonState(button, fields) {
   if (hasInvalidInput(fields)) {
     disableButton(button);
-    // console.log('false: ' + button + ' ' + fields);
   } else {
     enableButton(button);
-    // console.log('true: ' + button + ' ' + fields);
   }
 }
 
@@ -84,13 +82,11 @@ function hideInputError(form, field) {
 }
 
 function enableButton(button) {
-  // console.log('enabling!');
   button.disabled = false;
   button.classList.remove('form__button_inactive');
 }
 
 function disableButton(button) {
-  // console.log('disabling!');
   button.disabled = true;
   button.classList.add('form__button_inactive');
 }
