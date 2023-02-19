@@ -1,6 +1,10 @@
 // ** IMPORTS ** //
 //---------------//
-import { createPlace, addPlace } from './cards.js';
+import {
+  requestAddPlace,
+  requestUpdateAvatar,
+  requestUpdateProfileData,
+} from './api.js';
 import { checkInputValidity, toggleButtonState } from './validate.js';
 
 // ** GLOBALS ** //
@@ -88,27 +92,17 @@ function handleAvatarEditFormSubmit() {
 function handleProfileEditFormSubmit() {
   const newName = profileNameField.value;
   const newDescription = profileDescriptionField.value;
-  updateProfileData(newName, newDescription);
+  requestUpdateProfileData(newName, newDescription);
 }
 
 function handleAddPlaceFormSubmit() {
   const title = placeTitleField.value;
   const link = placeLinkField.value;
-  addPlace(createPlace(title, link));
+  requestAddPlace({ title: title, link: link });
 }
 
 function updateAvatar(newAvatar) {
-  const avatarEditButton = document.querySelector(
-    '.profile__avatar-edit-button'
-  );
-  avatarEditButton.style.backgroundImage = 'url(' + newAvatar + ')';
-}
-
-function updateProfileData(newName, newDescription) {
-  const profileName = document.querySelector('.profile__name');
-  const profileDescription = document.querySelector('.profile__description');
-  profileName.textContent = newName;
-  profileDescription.textContent = newDescription;
+  requestUpdateAvatar(newAvatar);
 }
 
 // ** ELEMENT MANIPULATION ** //

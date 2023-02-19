@@ -30,9 +30,12 @@
 @import url(../blocks/card/card.css);
 @import url(../blocks/card/__image/card__image.css);
 @import url(../blocks/card/__name/card__name.css);
+@import url(../blocks/card/__like-button-container/card__like-button-container.css);
 @import url(../blocks/card/__like-button/card__like-button.css);
+@import url(../blocks/card/__like-button-count/card__like-button-count.css);
 @import url(../blocks/card/__like-button/_active/card__like-button_active.css);
 @import url(../blocks/card/__delete-button/card__delete-button.css);
+@import url(../blocks/card/__delete-button/_hidden/card__delete-button_hidden.css);
 /* ====================== */
 
 /* =======Footer========= */

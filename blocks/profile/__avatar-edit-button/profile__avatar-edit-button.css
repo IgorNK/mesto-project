@@ -5,7 +5,7 @@
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0);
   position: relative;
-  background-image: url(../../../images/cousteau.jpg);
+  /* background-image: url(../../../images/cousteau.jpg); */
   background-blend-mode: darken;
   background-position: center;
   background-repeat: no-repeat;

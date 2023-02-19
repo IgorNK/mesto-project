@@ -8,10 +8,8 @@
   background-position: center;
   background-size: 22px 19px;
   background-repeat: no-repeat;
-  justify-self: end;
   width: 22px;
   height: 19px;
-  margin-right: 20px;
   transition: opacity 0.2s linear;
 }
 
