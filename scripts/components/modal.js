@@ -61,6 +61,9 @@ const forms = {
   },
 };
 
+const processingMessage = 'Saving...';
+const defaultSubmitMessage = 'Сохранить';
+
 // ** EVENT LISTENING ** //
 //-----------------------//
 function addCloseButtonListeners() {
@@ -78,44 +81,66 @@ function addFormSubmitListeners(forms) {
     forms[formName].form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       // console.log('submit!', forms[formName].callback);
-      forms[formName].callback();
+      forms[formName].callback(forms[formName]);
       // console.log('after callback');
-      hidePopup(forms[formName].popup);
-      resetForm(forms[formName]);
+      // hidePopup(forms[formName].popup);
+      // resetForm(forms[formName]);
     });
   }
 }
 
 // ** EVENT HANDLERS ** //
 //----------------------//
-function handleAvatarEditFormSubmit() {
+function handleAvatarEditFormSubmit(form) {
   const newAvatar = avatarLinkField.value;
+  onProcessingStart(form);
   requestUpdateAvatar(newAvatar)
-    .then((data) => renderProfile(data))
-    .catch((err) => {
-      console.log(`ERROR: ${err}`);
-    });
-}
-
-function handleProfileEditFormSubmit() {
-  const newName = profileNameField.value;
-  const newDescription = profileDescriptionField.value;
-  requestUpdateProfileData(newName, newDescription)
     .then((data) => {
-      // console.log('updated profile data: ');
       renderProfile(data);
+      onProcessingComplete(form);
     })
     .catch((err) => {
       console.log(`ERROR: ${err}`);
     });
 }
 
-function handleAddPlaceFormSubmit() {
+function handleProfileEditFormSubmit(form) {
+  const newName = profileNameField.value;
+  const newDescription = profileDescriptionField.value;
+  form.submit.textContent = processingMessage;
+  requestUpdateProfileData(newName, newDescription)
+    .then((data) => {
+      // console.log('updated profile data: ');
+      renderProfile(data);
+      onProcessingComplete(form);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+    });
+}
+
+function handleAddPlaceFormSubmit(form) {
   const title = placeTitleField.value;
   const link = placeLinkField.value;
+  form.submit.textContent = processingMessage;
   requestAddPlace({ title: title, link: link })
-    .then((data) => renderCard(data))
+    .then((data) => {
+      renderCard(data);
+      onProcessingComplete(form);
+    })
     .catch((err) => console.log(`ERROR: ${err}`));
+}
+
+// ** SAVE PROCESS RENDERING ** //
+//------------------------------//
+function onProcessingStart(form) {
+  form.submit.textContent = processingMessage;
+}
+
+function onProcessingComplete(form) {
+  form.submit.textContent = defaultSubmitMessage;
+  hidePopup(form.popup);
+  resetForm(form);
 }
 
 // ** ELEMENT MANIPULATION ** //

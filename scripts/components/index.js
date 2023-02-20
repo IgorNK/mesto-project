@@ -70,7 +70,7 @@ function getProfile() {
 function getCards() {
   fetchCards()
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       renderCards(data);
     })
     .catch((err) => {
