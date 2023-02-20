@@ -4,9 +4,10 @@ import {
   requestAddPlace,
   requestUpdateAvatar,
   requestUpdateProfileData,
+  requestDeletePlace,
 } from './api.js';
 import { renderProfile } from './index.js';
-import { renderCard } from './cards.js';
+import { renderCard, deletePlace } from './cards.js';
 import { checkInputValidity, toggleButtonState } from './validate.js';
 
 // ** GLOBALS ** //
@@ -14,9 +15,11 @@ import { checkInputValidity, toggleButtonState } from './validate.js';
 const popupAddPlace = document.querySelector('.popup__for_add-place');
 const popupProfileEdit = document.querySelector('.popup__for_profile-edit');
 const popupAvatarEdit = document.querySelector('.popup__for_avatar-edit');
+const popupDeletePlace = document.querySelector('.popup__for_delete-place');
 
 const profileEditForm = document.forms['profile-edit'];
 const addPlaceForm = document.forms['add-place'];
+const deletePlaceForm = document.forms['delete-place'];
 const avatarEditForm = document.forms['avatar-edit'];
 
 const profileNameField = profileEditForm.elements['name'];
@@ -27,6 +30,7 @@ const placeLinkField = addPlaceForm.elements['link'];
 
 const profileEditSubmit = profileEditForm.querySelector('.form__button');
 const addPlaceSubmit = addPlaceForm.querySelector('.form__button');
+const deletePlaceSubmit = deletePlaceForm.querySelector('.form__button');
 const avatarEditSubmit = avatarEditForm.querySelector('.form__button');
 
 const forms = {
@@ -50,6 +54,13 @@ const forms = {
     callback: handleAddPlaceFormSubmit,
     submit: addPlaceSubmit,
   },
+  deletePlace: {
+    form: deletePlaceForm,
+    popup: popupDeletePlace,
+    place: null,
+    callback: handleDeletePlaceFormSubmit,
+    submit: deletePlaceSubmit,
+  },
   avatarEdit: {
     form: avatarEditForm,
     popup: popupAvatarEdit,
@@ -63,6 +74,7 @@ const forms = {
 
 const processingMessage = 'Saving...';
 const defaultSubmitMessage = 'Сохранить';
+const confirmSubmitMessage = 'Да';
 
 // ** EVENT LISTENING ** //
 //-----------------------//
@@ -100,35 +112,48 @@ function handleAvatarEditFormSubmit(form) {
       onProcessingComplete(form);
     })
     .catch((err) => {
-      console.log(`ERROR: ${err}`);
+      console.log(`EDIT AVATAR ERROR: ${err}`);
     });
 }
 
 function handleProfileEditFormSubmit(form) {
   const newName = profileNameField.value;
   const newDescription = profileDescriptionField.value;
-  form.submit.textContent = processingMessage;
+  onProcessingStart(form);
   requestUpdateProfileData(newName, newDescription)
     .then((data) => {
       // console.log('updated profile data: ');
       renderProfile(data);
-      onProcessingComplete(form);
+      onProcessingComplete(form, defaultSubmitMessage);
     })
     .catch((err) => {
-      console.log(`ERROR: ${err}`);
+      console.log(`EDIT PROFILE ERROR: ${err}`);
     });
 }
 
 function handleAddPlaceFormSubmit(form) {
   const title = placeTitleField.value;
   const link = placeLinkField.value;
-  form.submit.textContent = processingMessage;
+  onProcessingStart(form);
   requestAddPlace({ title: title, link: link })
     .then((data) => {
       renderCard(data);
-      onProcessingComplete(form);
+      onProcessingComplete(form, defaultSubmitMessage);
     })
-    .catch((err) => console.log(`ERROR: ${err}`));
+    .catch((err) => console.log(`ADD PLACE ERROR: ${err}`));
+}
+
+function handleDeletePlaceFormSubmit(form) {
+  onProcessingStart(form);
+  const place = form.place;
+  requestDeletePlace(place._id)
+    .then((data) => {
+      deletePlace(place);
+      onProcessingComplete(form, confirmSubmitMessage);
+    })
+    .catch((err) => {
+      console.log(`DELETE PLACE ERROR: ${err}`);
+    });
 }
 
 // ** SAVE PROCESS RENDERING ** //
@@ -137,8 +162,8 @@ function onProcessingStart(form) {
   form.submit.textContent = processingMessage;
 }
 
-function onProcessingComplete(form) {
-  form.submit.textContent = defaultSubmitMessage;
+function onProcessingComplete(form, message) {
+  form.submit.textContent = message;
   hidePopup(form.popup);
   resetForm(form);
 }
@@ -171,6 +196,9 @@ function hidePopup(popup) {
 
 function resetForm(formObj) {
   formObj.form.reset();
+  if (formObj.fields == null) {
+    return;
+  }
   const fields = Object.values(formObj.fields);
   toggleButtonState(formObj.submit, fields);
 }

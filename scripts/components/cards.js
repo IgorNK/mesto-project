@@ -1,6 +1,6 @@
 import { user } from './index.js';
 import { requestLike, requestUnlike, requestDeletePlace } from './api.js';
-import { showPopup } from './modal.js';
+import { showPopup, forms } from './modal.js';
 import { getLikedPlace } from './utils.js';
 
 let places = [];
@@ -47,11 +47,11 @@ function createPlace(place) {
 
   if (place.owner._id == user._id) {
     placeDeleteButton.addEventListener('click', () => {
-      deletePlace(place);
-      requestDeletePlace(place._id).catch((err) => {
-        console.log(`ERROR: ${err}`);
-        return null;
-      });
+      offerDeletePlace(place);
+      // requestDeletePlace(place._id).catch((err) => {
+      //   console.log(`ERROR: ${err}`);
+      //   return null;
+      // });
     });
   } else {
     placeDeleteButton.classList.add('card__delete-button_hidden');
@@ -96,6 +96,11 @@ function addPlace(placeElement) {
   placesContainer.append(placeElement);
 }
 
+function offerDeletePlace(place) {
+  forms.deletePlace.place = place;
+  showPopup(forms.deletePlace.popup);
+}
+
 function deletePlace(place) {
   const placeElement = place.placeElement;
   placeElement.remove();
@@ -128,4 +133,4 @@ function clearCards() {
   });
 }
 
-export { createPlace, addPlace, renderCards, renderCard };
+export { createPlace, addPlace, renderCards, renderCard, deletePlace };

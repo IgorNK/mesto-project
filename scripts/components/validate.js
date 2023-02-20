@@ -53,6 +53,10 @@ function hasInvalidInput(fields) {
 // ** EVENT LISTENING ** //
 //-----------------------//
 function addFieldInputListeners(formObj) {
+  if (formObj.fields == null) {
+    return;
+  }
+  
   const fields = Object.values(formObj.fields);
   const button = formObj.submit;
   const form = formObj.form;

@@ -51,8 +51,12 @@ function requestDeletePlace(cardId) {
     method: 'DELETE',
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) return res.json();
-    else return Promise.reject(res.status);
+    if (res.ok) {
+      return res.json();
+    } else {
+      console.log('erroring now');
+      return Promise.reject(res.status);
+    }
   });
 }
 
