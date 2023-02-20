@@ -1,6 +1,9 @@
-import { user, cards } from './index.js';
-import { requestLike, requestUnlike } from './api.js';
+import { user } from './index.js';
+import { requestLike, requestUnlike, requestDeletePlace } from './api.js';
 import { showPopup } from './modal.js';
+import { getLikedPlace } from './utils.js';
+
+let places = [];
 
 // ****** Places card template ****** //
 const placeTemplate = document.querySelector('#card-template').content;
@@ -14,104 +17,88 @@ function createPlace(place) {
   const placeLikeCount = placeElement.querySelector('.card__like-button-count');
   const placeDeleteButton = placeElement.querySelector('.card__delete-button');
 
-  place['likeButton'] = placeLikeButton;
-  place['likeCount'] = placeLikeCount;
+  place.placeElement = placeElement;
+  place.likeButton = placeLikeButton;
+  place.likeCount = placeLikeCount;
 
   placeTitleElement.textContent = place.name;
   placeImageElement.src = place.link;
   placeImageElement.alt = place.name;
   placeLikeCount.textContent = place.likes.length;
 
-  // const liked = false;
+  // Like button
+
   const liked = place.likes.reduce((me, profile) => {
     return profile._id == user._id;
   }, false);
 
-  // console.log(place.likes);
-  // console.log(liked);
-
-  place['currentLikeCallback'] = function () {};
+  place.currentLikeCallback = function () {};
 
   if (liked) {
     placeLikeButton.classList.add('card__like-button_active');
-    place.currentLikeCallback = () => {
-      placeLikeButton.classList.toggle('card__like-button_active');
-      removeLike(place);
-    };
+    place.currentLikeCallback = removeLikeCallback;
   } else {
     placeLikeButton.classList.remove('card__like-button_active');
-    place.currentLikeCallback = () => {
-      placeLikeButton.classList.toggle('card__like-button_active');
-      addLike(place);
-    };
+    place.currentLikeCallback = addLikeCallback;
   }
+  placeLikeButton.addEventListener('click', onLike);
 
-  placeLikeButton.addEventListener('click', place.currentLikeCallback);
-  console.log('callback: ' + place.currentLikeCallback);
+  // Delete button
 
   if (place.owner._id == user._id) {
     placeDeleteButton.addEventListener('click', () => {
-      requestDeletePlace(place._id);
+      deletePlace(place);
+      requestDeletePlace(place._id).catch((err) => {
+        console.log(`ERROR: ${err}`);
+        return null;
+      });
     });
   } else {
     placeDeleteButton.classList.add('card__delete-button_hidden');
   }
 
+  // Full image button
+
   placeImageElement.addEventListener('click', () => {
     showFullImage(place.link, place.name);
   });
 
+  places.push(place);
+
   return placeElement;
 }
 
-function addLike(place) {
-  const placeLikeButton = place.likeButton;
-  const likeCount = place.likeCount;
-  const id = place._id;
-  requestLike(id)
-    .then((card) => {
-      likeCount.textContent = card.likes.length;
-    })
-    .then(() => {
-      placeLikeButton.removeEventListener('click', place.currentLikeCallback);
-      place.currentLikeCallback = () => {
-        placeLikeButton.classList.toggle('card__like-button_active');
-        removeLike(place);
-      };
-      placeLikeButton.addEventListener('click', place.currentLikeCallback);
-      // console.log(place);
-    })
-    .catch((err) => {
-      console.log(`LIKE REQUEST ERROR: ${err}`);
-      return null;
-    });
+function onLike(evt) {
+  const likeButton = evt.target;
+  const place = getLikedPlace(places, likeButton);
+  place.currentLikeCallback(place);
 }
 
-function removeLike(place) {
-  const placeLikeButton = place.likeButton;
-  const likeCount = place.likeCount;
-  const id = place._id;
-  requestUnlike(id)
-    .then((card) => {
-      likeCount.textContent = card.likes.length;
-    })
-    .then(() => {
-      placeLikeButton.removeEventListener('click', place.currentLikeCallback);
-      place.currentLikeCallback = () => {
-        placeLikeButton.classList.toggle('card__like-button_active');
-        addLike(place);
-      };
-      placeLikeButton.addEventListener('click', place.currentLikeCallback);
-      // console.log(place);
-    })
-    .catch((err) => {
-      console.log(`UNLIKE REQUEST ERROR: ${err}`);
-      return null;
-    });
+function addLikeCallback(place) {
+  place.likeCount.textContent = parseInt(place.likeCount.textContent) + 1;
+  place.likeButton.classList.add('card__like-button_active');
+  place.currentLikeCallback = removeLikeCallback;
+  requestLike(place._id).catch((err) => {
+    console.log(`LIKE REQUEST ERROR: ${err}`);
+  });
+}
+
+function removeLikeCallback(place) {
+  place.likeCount.textContent = parseInt(place.likeCount.textContent) - 1;
+  place.likeButton.classList.remove('card__like-button_active');
+  place.currentLikeCallback = addLikeCallback;
+  requestUnlike(place._id).catch((err) => {
+    console.log(`UNLIKE REQUEST ERROR: ${err}`);
+  });
 }
 
 function addPlace(placeElement) {
   placesContainer.append(placeElement);
+}
+
+function deletePlace(place) {
+  const placeElement = place.placeElement;
+  placeElement.remove();
 }
 
 function showFullImage(link, title) {
@@ -131,10 +118,14 @@ function renderCards(cards) {
   });
 }
 
+function renderCard(card) {
+  placesContainer.prepend(createPlace(card));
+}
+
 function clearCards() {
   Array.from(placesContainer.children).forEach((place) => {
     place.remove();
   });
 }
 
-export { createPlace, addPlace, renderCards, cards };
+export { createPlace, addPlace, renderCards, renderCard };

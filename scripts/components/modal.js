@@ -5,6 +5,8 @@ import {
   requestUpdateAvatar,
   requestUpdateProfileData,
 } from './api.js';
+import { renderProfile } from './index.js';
+import { renderCard } from './cards.js';
 import { checkInputValidity, toggleButtonState } from './validate.js';
 
 // ** GLOBALS ** //
@@ -75,7 +77,9 @@ function addFormSubmitListeners(forms) {
   for (const formName in forms) {
     forms[formName].form.addEventListener('submit', (evt) => {
       evt.preventDefault();
+      // console.log('submit!', forms[formName].callback);
       forms[formName].callback();
+      // console.log('after callback');
       hidePopup(forms[formName].popup);
       resetForm(forms[formName]);
     });
@@ -86,23 +90,32 @@ function addFormSubmitListeners(forms) {
 //----------------------//
 function handleAvatarEditFormSubmit() {
   const newAvatar = avatarLinkField.value;
-  updateAvatar(newAvatar);
+  requestUpdateAvatar(newAvatar)
+    .then((data) => renderProfile(data))
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+    });
 }
 
 function handleProfileEditFormSubmit() {
   const newName = profileNameField.value;
   const newDescription = profileDescriptionField.value;
-  requestUpdateProfileData(newName, newDescription);
+  requestUpdateProfileData(newName, newDescription)
+    .then((data) => {
+      // console.log('updated profile data: ');
+      renderProfile(data);
+    })
+    .catch((err) => {
+      console.log(`ERROR: ${err}`);
+    });
 }
 
 function handleAddPlaceFormSubmit() {
   const title = placeTitleField.value;
   const link = placeLinkField.value;
-  requestAddPlace({ title: title, link: link });
-}
-
-function updateAvatar(newAvatar) {
-  requestUpdateAvatar(newAvatar);
+  requestAddPlace({ title: title, link: link })
+    .then((data) => renderCard(data))
+    .catch((err) => console.log(`ERROR: ${err}`));
 }
 
 // ** ELEMENT MANIPULATION ** //

@@ -8,7 +8,6 @@ import { forms, enableForms, showPopup, hidePopup } from './modal.js';
 import { enableValidation, checkInputValidity } from './validate.js';
 
 let user;
-let cards;
 
 // ** STUFF TO DO ON PAGE LOAD ** //
 //--------------------------------//
@@ -72,8 +71,7 @@ function getCards() {
   fetchCards()
     .then((data) => {
       console.log(data);
-      cards = data;
-      renderCards(cards);
+      renderCards(data);
     })
     .catch((err) => {
       console.log(`CARDS REQUEST ERROR: ${err}`);
@@ -103,4 +101,4 @@ enableValidation(forms); // Imported from ./validate.js
 
 getProfile();
 
-export { user, cards };
+export { user, getCards, renderProfile };

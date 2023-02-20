@@ -50,81 +50,60 @@ function requestDeletePlace(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  })
-    .then((res) => {
-      if (res.ok) return res.json();
-      else return Promise.reject(res.status);
-    })
-    .then(() => fetchCards())
-    .catch((err) => {
-      console.log(`ERROR: ${err}`);
-      return null;
-    });
+  }).then((res) => {
+    if (res.ok) return res.json();
+    else return Promise.reject(res.status);
+  });
 }
 
 function requestUpdateAvatar(link) {
-  fetch(`${config.baseUrl}/users/me/avatar`, {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       avatar: link,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return;
-      } else {
-        return Promise.reject(res.status);
-      }
-    })
-    .then(() => fetchProfile())
-    .catch((err) => {
-      console.log(`ERROR: ${err}`);
-    });
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(res.status);
+    }
+  });
 }
 
 function requestAddPlace(place) {
-  fetch(`${config.baseUrl}/cards`, {
+  return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
       name: place.title,
       link: place.link,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return;
-      } else {
-        return Promise.reject(res.status);
-      }
-    })
-    .then(() => {
-      fetchCards();
-    })
-    .catch((err) => console.log(`ERROR: ${err}`));
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(res.status);
+    }
+  });
 }
 
 function requestUpdateProfileData(newName, newDescription) {
-  fetch(`${config.baseUrl}/users/me`, {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       name: newName,
       about: newDescription,
     }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return;
-      } else {
-        return Promise.reject(res.status);
-      }
-    })
-    .then(() => fetchProfile())
-    .catch((err) => {
-      console.log(`ERROR: ${err}`);
-    });
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(res.status);
+    }
+  });
 }
 
 export {
