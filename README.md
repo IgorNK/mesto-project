@@ -21,11 +21,11 @@
 - CSS
 - Javascript
 - Webpack, Babel.js, postcss
+- Deployment with gh-pages
 
 **Страница на Github Pages**
 
 [Mesto - страница на Github.io](https://igornk.github.io/mesto-project/)
-ВНИМАНИЕ! На текущий момент страница отображается некорректно.
 
 **Автор**
 Назиров Игорь, студент 21-Snow группы Web+
