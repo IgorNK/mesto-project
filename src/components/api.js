@@ -7,13 +7,18 @@ const config = {
   },
 };
 
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(res.status);
+}
+
 function fetchProfile() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else return Promise.reject(res.status);
+    return checkResponse(res);
   });
 }
 
@@ -21,8 +26,7 @@ function fetchCards() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) return res.json();
-    else return Promise.reject(res.status);
+    return checkResponse(res);
   });
 }
 
@@ -31,8 +35,7 @@ function requestLike(cardId) {
     method: 'PUT',
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) return res.json();
-    else return Promise.reject(res.status);
+    return checkResponse(res);
   });
 }
 
@@ -41,8 +44,7 @@ function requestUnlike(cardId) {
     method: 'DELETE',
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) return res.json();
-    else return Promise.reject(res.status);
+    return checkResponse(res);
   });
 }
 
@@ -51,12 +53,7 @@ function requestDeletePlace(cardId) {
     method: 'DELETE',
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      console.log('erroring now');
-      return Promise.reject(res.status);
-    }
+    return checkResponse(res);
   });
 }
 
@@ -68,11 +65,7 @@ function requestUpdateAvatar(link) {
       avatar: link,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(res.status);
-    }
+    return checkResponse(res);
   });
 }
 
@@ -85,11 +78,7 @@ function requestAddPlace(place) {
       link: place.link,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(res.status);
-    }
+    return checkResponse(res);
   });
 }
 
@@ -102,11 +91,7 @@ function requestUpdateProfileData(newName, newDescription) {
       about: newDescription,
     }),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(res.status);
-    }
+    return checkResponse(res);
   });
 }
 

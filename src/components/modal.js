@@ -6,70 +6,15 @@ import {
   requestUpdateProfileData,
   requestDeletePlace,
 } from './api.js';
-import { renderProfile } from './index.js';
+import { cards, updateUser, updateCards, renderProfile } from './index.js';
 import { renderCard, deletePlace } from './cards.js';
-import { checkInputValidity, toggleButtonState } from './validate.js';
+import { toggleButtonState } from './validate.js';
 
-// ** GLOBALS ** //
-//---------------//
-const popupAddPlace = document.querySelector('.popup__for_add-place');
-const popupProfileEdit = document.querySelector('.popup__for_profile-edit');
-const popupAvatarEdit = document.querySelector('.popup__for_avatar-edit');
-const popupDeletePlace = document.querySelector('.popup__for_delete-place');
-
-const profileEditForm = document.forms['profile-edit'];
-const addPlaceForm = document.forms['add-place'];
-const deletePlaceForm = document.forms['delete-place'];
-const avatarEditForm = document.forms['avatar-edit'];
-
-const profileNameField = profileEditForm.elements['name'];
-const profileDescriptionField = profileEditForm.elements['description'];
-const avatarLinkField = avatarEditForm.elements['link'];
-const placeTitleField = addPlaceForm.elements['title'];
-const placeLinkField = addPlaceForm.elements['link'];
-
-const profileEditSubmit = profileEditForm.querySelector('.form__button');
-const addPlaceSubmit = addPlaceForm.querySelector('.form__button');
-const deletePlaceSubmit = deletePlaceForm.querySelector('.form__button');
-const avatarEditSubmit = avatarEditForm.querySelector('.form__button');
-
-const forms = {
-  profileEdit: {
-    form: profileEditForm,
-    popup: popupProfileEdit,
-    fields: {
-      name: profileNameField,
-      description: profileDescriptionField,
-    },
-    callback: handleProfileEditFormSubmit,
-    submit: profileEditSubmit,
-  },
-  addPlace: {
-    form: addPlaceForm,
-    popup: popupAddPlace,
-    fields: {
-      title: placeTitleField,
-      link: placeLinkField,
-    },
-    callback: handleAddPlaceFormSubmit,
-    submit: addPlaceSubmit,
-  },
-  deletePlace: {
-    form: deletePlaceForm,
-    popup: popupDeletePlace,
-    place: null,
-    callback: handleDeletePlaceFormSubmit,
-    submit: deletePlaceSubmit,
-  },
-  avatarEdit: {
-    form: avatarEditForm,
-    popup: popupAvatarEdit,
-    fields: {
-      link: avatarLinkField,
-    },
-    callback: handleAvatarEditFormSubmit,
-    submit: avatarEditSubmit,
-  },
+const formSubmitCallabcks = {
+  'avatar-edit': handleAvatarEditFormSubmit,
+  'profile-edit': handleProfileEditFormSubmit,
+  'add-place': handleAddPlaceFormSubmit,
+  'delete-place': handleDeletePlaceFormSubmit,
 };
 
 const processingMessage = 'Saving...';
@@ -92,11 +37,7 @@ function addFormSubmitListeners(forms) {
   for (const formName in forms) {
     forms[formName].form.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      // console.log('submit!', forms[formName].callback);
       forms[formName].callback(forms[formName]);
-      // console.log('after callback');
-      // hidePopup(forms[formName].popup);
-      // resetForm(forms[formName]);
     });
   }
 }
@@ -104,43 +45,56 @@ function addFormSubmitListeners(forms) {
 // ** EVENT HANDLERS ** //
 //----------------------//
 function handleAvatarEditFormSubmit(form) {
-  const newAvatar = avatarLinkField.value;
+  const linkField = form.fields[0];
+  const newAvatar = linkField.value;
   onProcessingStart(form);
   requestUpdateAvatar(newAvatar)
     .then((data) => {
+      updateUser(data);
       renderProfile(data);
-      onProcessingComplete(form);
     })
     .catch((err) => {
       console.log(`EDIT AVATAR ERROR: ${err}`);
+    })
+    .finally(() => {
+      onProcessingComplete(form, defaultSubmitMessage);
     });
 }
 
 function handleProfileEditFormSubmit(form) {
-  const newName = profileNameField.value;
-  const newDescription = profileDescriptionField.value;
+  const nameField = form.fields[0];
+  const descriptField = form.fields[1];
+  const newName = nameField.value;
+  const newDescription = descriptField.value;
   onProcessingStart(form);
   requestUpdateProfileData(newName, newDescription)
     .then((data) => {
-      // console.log('updated profile data: ');
+      updateUser(data);
       renderProfile(data);
-      onProcessingComplete(form, defaultSubmitMessage);
     })
     .catch((err) => {
       console.log(`EDIT PROFILE ERROR: ${err}`);
+    })
+    .finally(() => {
+      onProcessingComplete(form, defaultSubmitMessage);
     });
 }
 
 function handleAddPlaceFormSubmit(form) {
-  const title = placeTitleField.value;
-  const link = placeLinkField.value;
+  const titleField = form.fields[0];
+  const linkField = form.fields[1];
+  const title = titleField.value;
+  const link = linkField.value;
   onProcessingStart(form);
   requestAddPlace({ title: title, link: link })
     .then((data) => {
       renderCard(data);
-      onProcessingComplete(form, defaultSubmitMessage);
+      updateCards(cards.concat(data));
     })
-    .catch((err) => console.log(`ADD PLACE ERROR: ${err}`));
+    .catch((err) => console.log(`ADD PLACE ERROR: ${err}`))
+    .finally(() => {
+      onProcessingComplete(form, defaultSubmitMessage);
+    });
 }
 
 function handleDeletePlaceFormSubmit(form) {
@@ -149,10 +103,12 @@ function handleDeletePlaceFormSubmit(form) {
   requestDeletePlace(place._id)
     .then((data) => {
       deletePlace(place);
-      onProcessingComplete(form, confirmSubmitMessage);
     })
     .catch((err) => {
       console.log(`DELETE PLACE ERROR: ${err}`);
+    })
+    .finally(() => {
+      onProcessingComplete(form, confirmSubmitMessage);
     });
 }
 
@@ -205,11 +161,16 @@ function resetForm(formObj) {
 
 // ** This one is called from scipt.js for initialization ** //
 //-----------------------------------------------------------//
-function enableForms() {
+function enableForms(forms) {
   addFormSubmitListeners(forms);
-  addCloseButtonListeners();
 }
 
 // ** EXPORT ** //
 //--------------//
-export { forms, enableForms, showPopup, hidePopup };
+export {
+  enableForms,
+  addCloseButtonListeners,
+  showPopup,
+  hidePopup,
+  formSubmitCallabcks,
+};

@@ -31,41 +31,6 @@
       </section>
 
       <section class="cards page__cards" aria-label="Содержимое страницы">
-        <!-- <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаевск">
-          <h2 class="card__name">Карачаевск</h2>
-          <button class="card__like-button card__like-button_active" type=button></button>
-        </article>
-
-        <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1404681-unsplash.jpg" alt="Гора Эльбрус">
-          <h2 class="card__name">Гора Эльбрус</h2>
-          <button class="card__like-button" type=button></button>
-        </article>
-
-        <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
-          <h2 class="card__name">Домбай</h2>
-          <button class="card__like-button" type=button></button>
-        </article>
-
-        <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1404681-unsplash.jpg" alt="Гора Эльбрус">
-          <h2 class="card__name">Гора Эльбрус</h2>
-          <button class="card__like-button" type=button></button>
-        </article>
-
-        <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1556355-unsplash.jpg" alt="Домбай">
-          <h2 class="card__name">Домбай</h2>
-          <button class="card__like-button" type=button></button>
-        </article>
-
-        <article class="card">
-          <img class="card__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаево-Черкессия">
-          <h2 class="card__name">Карачаево-Черкессия</h2>
-          <button class="card__like-button" type=button></button>
-        </article> -->
       </section>
       <!-- Cards end -->
 
@@ -81,9 +46,9 @@
         <button class="popup__close-button" type="button"></button>
         <form class="form" name="avatar-edit" novalidate>
           <h2 class="popup__heading">Обновить&nbsp;аватар</h2>
-          <input class="form__field form__field_link" id="image-link-field" type="url" name="link"
+          <input class="form__field form__field_link" id="avatar-link-field" type="url" name="link"
             placeholder="Ссылка на картинку" required>
-          <span class="form__field-error image-link-field-error"></span>
+          <span class="form__field-error avatar-link-field-error"></span>
           <button class="form__button form__button_avatar-save" type=submit>Сохранить</button>
         </form>
       </div>
@@ -94,8 +59,8 @@
         <button class="popup__close-button" type="button"></button>
         <form class="form" name="profile-edit" novalidate>
           <h2 class="popup__heading">Редактировать&nbsp;профиль</h2>
-          <input class="form__field form__field_name" id="name-field" type="text" name="name" placeholder="Введите имя"
-            minlength="2" maxlength="30"
+          <input class="form__field form__field_name" id="name-field" type="text" name="username"
+            placeholder="Введите имя" minlength="2" maxlength="30"
             pattern="^[a-zA-Zа-яА-ЯёЁäöüÄÖÜß'\-]{1,30}(?: [a-zA-Zа-яА-ЯёЁäöüÄÖÜß'\-]{1,30})*$"
             data-error-message="Only latin and cyrillic letters, ' and - symbools and spaces allowed." required>
           <span class="form__field-error name-field-error"></span>
@@ -106,6 +71,7 @@
         </form>
       </div>
     </div>
+
 
     <div class="popup popup__for_add-place">
       <div class="popup__container">

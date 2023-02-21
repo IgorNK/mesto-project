@@ -1,9 +1,7 @@
-import { user } from './index.js';
-import { requestLike, requestUnlike, requestDeletePlace } from './api.js';
-import { showPopup, forms } from './modal.js';
+import { user, cards, forms } from './index.js';
+import { requestLike, requestUnlike } from './api.js';
+import { showPopup } from './modal.js';
 import { getLikedPlace } from './utils.js';
-
-let places = [];
 
 // ****** Places card template ****** //
 const placeTemplate = document.querySelector('#card-template').content;
@@ -35,10 +33,10 @@ function createPlace(place) {
   place.currentLikeCallback = function () {};
 
   if (liked) {
-    placeLikeButton.classList.add('card__like-button_active');
+    place.likeButton.classList.add('card__like-button_active');
     place.currentLikeCallback = removeLikeCallback;
   } else {
-    placeLikeButton.classList.remove('card__like-button_active');
+    place.likeButton.classList.remove('card__like-button_active');
     place.currentLikeCallback = addLikeCallback;
   }
   placeLikeButton.addEventListener('click', onLike);
@@ -63,33 +61,37 @@ function createPlace(place) {
     showFullImage(place.link, place.name);
   });
 
-  places.push(place);
-
   return placeElement;
 }
 
 function onLike(evt) {
   const likeButton = evt.target;
-  const place = getLikedPlace(places, likeButton);
+  const place = getLikedPlace(cards, likeButton);
   place.currentLikeCallback(place);
 }
 
 function addLikeCallback(place) {
-  place.likeCount.textContent = parseInt(place.likeCount.textContent) + 1;
-  place.likeButton.classList.add('card__like-button_active');
   place.currentLikeCallback = removeLikeCallback;
-  requestLike(place._id).catch((err) => {
-    console.log(`LIKE REQUEST ERROR: ${err}`);
-  });
+  requestLike(place._id)
+    .then(() => {
+      place.likeButton.classList.add('card__like-button_active');
+      place.likeCount.textContent = parseInt(place.likeCount.textContent) + 1;
+    })
+    .catch((err) => {
+      console.log(`LIKE REQUEST ERROR: ${err}`);
+    });
 }
 
 function removeLikeCallback(place) {
-  place.likeCount.textContent = parseInt(place.likeCount.textContent) - 1;
-  place.likeButton.classList.remove('card__like-button_active');
   place.currentLikeCallback = addLikeCallback;
-  requestUnlike(place._id).catch((err) => {
-    console.log(`UNLIKE REQUEST ERROR: ${err}`);
-  });
+  requestUnlike(place._id)
+    .then(() => {
+      place.likeButton.classList.remove('card__like-button_active');
+      place.likeCount.textContent = parseInt(place.likeCount.textContent) - 1;
+    })
+    .catch((err) => {
+      console.log(`UNLIKE REQUEST ERROR: ${err}`);
+    });
 }
 
 function addPlace(placeElement) {
@@ -106,10 +108,10 @@ function deletePlace(place) {
   placeElement.remove();
 }
 
+const popupImage = document.querySelector('.popup__for_image');
+const popupImageElement = popupImage.querySelector('.popup__image');
+const popupImageCaption = popupImage.querySelector('.popup__image-caption');
 function showFullImage(link, title) {
-  const popupImage = document.querySelector('.popup__for_image');
-  const popupImageElement = popupImage.querySelector('.popup__image');
-  const popupImageCaption = popupImage.querySelector('.popup__image-caption');
   popupImageElement.src = link;
   popupImageElement.alt = title;
   popupImageCaption.textContent = title;
@@ -117,7 +119,6 @@ function showFullImage(link, title) {
 }
 
 function renderCards(cards) {
-  clearCards();
   cards.forEach((card) => {
     addPlace(createPlace(card));
   });
@@ -125,12 +126,6 @@ function renderCards(cards) {
 
 function renderCard(card) {
   placesContainer.prepend(createPlace(card));
-}
-
-function clearCards() {
-  Array.from(placesContainer.children).forEach((place) => {
-    place.remove();
-  });
 }
 
 export { createPlace, addPlace, renderCards, renderCard, deletePlace };
