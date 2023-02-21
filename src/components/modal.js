@@ -6,7 +6,13 @@ import {
   requestUpdateProfileData,
   requestDeletePlace,
 } from './api.js';
-import { cards, updateUser, updateCards, renderProfile } from './index.js';
+import {
+  formSelectors,
+  cards,
+  updateUser,
+  updateCards,
+  renderProfile,
+} from './index.js';
 import { renderCard, deletePlace } from './cards.js';
 import { toggleButtonState } from './validate.js';
 
@@ -156,7 +162,7 @@ function resetForm(formObj) {
     return;
   }
   const fields = Object.values(formObj.fields);
-  toggleButtonState(formObj.submit, fields);
+  toggleButtonState(formObj.submit, fields, formSelectors);
 }
 
 // ** This one is called from scipt.js for initialization ** //

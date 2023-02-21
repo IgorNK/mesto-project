@@ -87,7 +87,6 @@ function populateProfileEditInputs(profile) {
 function renderPage() {
   Promise.all([fetchProfile(), fetchCards()])
     .then((data) => {
-      console.log(data);
       const profileData = data[0];
       const cardsData = data[1];
       updateUser(profileData);
@@ -141,4 +140,12 @@ enableFormValidation(forms, formSelectors); // Imported from ./validate.js
 
 renderPage(); // In this scope
 
-export { user, cards, forms, updateUser, updateCards, renderProfile };
+export {
+  user,
+  cards,
+  forms,
+  formSelectors,
+  updateUser,
+  updateCards,
+  renderProfile,
+};

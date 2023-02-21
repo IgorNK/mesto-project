@@ -57,7 +57,6 @@ function hasInvalidInput(fields) {
 // ** EVENT LISTENING ** //
 //-----------------------//
 function addFieldInputListeners(formObj, formSelectors) {
-  console.log('addFieldListeners:' + formSelectors);
   if (formObj.fields.length == 0) {
     return;
   }
