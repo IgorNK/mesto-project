@@ -86,18 +86,14 @@ function populateProfileEditInputs(profile) {
 
 function renderPage() {
   Promise.all([fetchProfile(), fetchCards()])
-    .then((data) => {
-      const profileData = data[0];
-      const cardsData = data[1];
+    .then(([profileData, cardsData]) => {
       updateUser(profileData);
       updateCards(cardsData);
+      renderProfile(user);
+      renderCards(cards);
     })
     .catch((err) => {
       console.log(`ERROR GETTING DATA FROM SERVER: ${err}`);
-    })
-    .finally(() => {
-      renderProfile(user);
-      renderCards(cards);
     });
 }
 

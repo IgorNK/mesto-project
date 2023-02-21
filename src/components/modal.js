@@ -58,6 +58,7 @@ function handleAvatarEditFormSubmit(form) {
     .then((data) => {
       updateUser(data);
       renderProfile(data);
+      hidePopup(form.popup);
     })
     .catch((err) => {
       console.log(`EDIT AVATAR ERROR: ${err}`);
@@ -77,6 +78,7 @@ function handleProfileEditFormSubmit(form) {
     .then((data) => {
       updateUser(data);
       renderProfile(data);
+      hidePopup(form.popup);
     })
     .catch((err) => {
       console.log(`EDIT PROFILE ERROR: ${err}`);
@@ -96,6 +98,7 @@ function handleAddPlaceFormSubmit(form) {
     .then((data) => {
       renderCard(data);
       updateCards(cards.concat(data));
+      hidePopup(form.popup);
     })
     .catch((err) => console.log(`ADD PLACE ERROR: ${err}`))
     .finally(() => {
@@ -109,6 +112,7 @@ function handleDeletePlaceFormSubmit(form) {
   requestDeletePlace(place._id)
     .then((data) => {
       deletePlace(place);
+      hidePopup(form.popup);
     })
     .catch((err) => {
       console.log(`DELETE PLACE ERROR: ${err}`);
@@ -126,7 +130,6 @@ function onProcessingStart(form) {
 
 function onProcessingComplete(form, message) {
   form.submit.textContent = message;
-  hidePopup(form.popup);
   resetForm(form);
 }
 
