@@ -3,7 +3,7 @@
 //---------------//
 import '../pages/index.css';
 import { fetchProfile, fetchCards } from './api.js';
-import { renderCards } from './cards.js';
+import Card from './Card';
 import {
   enableForms,
   addCloseButtonListeners,
@@ -90,7 +90,6 @@ function renderPage() {
       updateUser(profileData);
       updateCards(cardsData);
       renderProfile(user);
-      renderCards(cards);
     })
     .catch((err) => {
       console.log(`ERROR GETTING DATA FROM SERVER: ${err}`);
@@ -119,7 +118,10 @@ function updateUser(profile) {
 }
 
 function updateCards(newCards) {
-  cards = newCards;
+  newCards.forEach(item => {
+    const card = new Card(item, '#card-template');
+    card.renderCard()
+  })
 }
 
 // ** ACTUAL PAGE INITIALIZATION ** //
