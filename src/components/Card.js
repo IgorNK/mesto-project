@@ -63,6 +63,8 @@ export default class Card {
             this._currentLikeCallback = this.addLikeCallback;
         }
 
+        _setEventListeners()
+
         return card;
 
     }
@@ -136,9 +138,6 @@ export default class Card {
     }
 
     renderCard() {
-        this.addCard(this._createPlace());
+        this.addCard(this._createCard());
     }
 }
-
-
-
