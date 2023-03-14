@@ -1,12 +1,12 @@
 import { user, forms } from './index.js';
 import { api } from './Api.js';
-import { showPopup } from './modal.js';
+import Popup from './Popup.js';
+// import { showPopup } from './modal.js';
 
 const placesContainer = document.querySelector('.cards');
 
-const popupImage = document.querySelector('.popup__for_image');
-const popupImageElement = popupImage.querySelector('.popup__image');
-const popupImageCaption = popupImage.querySelector('.popup__image-caption');
+// const popupImage = document.querySelector('.popup__for_image');
+const popupImage = new Popup('.popup__for_image');
 
 export default class Card {
   constructor(data, cardSelector) {
@@ -70,7 +70,7 @@ export default class Card {
           parseInt(this._cardLikeCount.textContent) + 1;
       })
       .catch((err) => {
-        console.log(`LIKE REQUEST ERROR: ${err}`);
+        console.log(`LIKE REQUEST ERROR: ${err} \n ${err.stack}`);
       });
   }
 
@@ -84,20 +84,23 @@ export default class Card {
           parseInt(this._cardLikeCount.textContent) - 1;
       })
       .catch((err) => {
-        console.log(`UNLIKE REQUEST ERROR: ${err}`);
+        console.log(`UNLIKE REQUEST ERROR: ${err} \n ${err.stack}`);
       });
   }
 
   offerDeletePlace() {
-    forms.deletePlace.place = this._data;
-    showPopup(forms.deletePlace.popup);
+    // forms.deletePlace.place = this._data;
+    forms.deletePlace.card = this;
+    // showPopup(forms.deletePlace.popup);
+    forms.deletePlace.popup.open();
   }
 
   showFullImage() {
-    popupImageElement.src = this._cardImageUrl;
-    popupImageElement.alt = this._cardTitle;
-    popupImageCaption.textContent = this._cardTitle;
-    showPopup(popupImage);
+    popupImage.imageElement.src = this._cardImageUrl;
+    popupImage.imageElement.alt = this._cardTitle;
+    popupImage.imageCaption.textContent = this._cardTitle;
+    // showPopup(popupImage);
+    popupImage.open();
   }
 
   _setEventListeners() {
@@ -128,5 +131,9 @@ export default class Card {
 
   renderCard() {
     this.addCard(this._createCard());
+  }
+
+  renderCardFront() {
+    placesContainer.prepend(this._createCard());
   }
 }

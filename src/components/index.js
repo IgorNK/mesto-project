@@ -3,15 +3,8 @@
 //---------------//
 import '../pages/index.css';
 import { api } from './Api.js';
-import Card from './Card';
-import {
-  enableForms,
-  addCloseButtonListeners,
-  showPopup,
-  hidePopup,
-  formSubmitCallabcks,
-} from './modal.js';
-import { enableFormValidation, checkInputValidity } from './validate.js';
+import Card from './Card.js';
+import Form from './Form.js';
 
 let user;
 let cards = [];
@@ -42,24 +35,24 @@ function addEventListeners() {
     '.profile__avatar-edit-button'
   );
   avatarEditButton.addEventListener('click', () => {
-    showPopup(forms.avatarEdit.popup);
+    forms.avatarEdit.popup.open();
   });
 
   const profileEditButton = document.querySelector('.profile__edit-button');
   profileEditButton.addEventListener('click', () => {
     populateProfileEditInputs(user);
-    showPopup(forms.profileEdit.popup);
+    forms.profileEdit.popup.open();
   });
 
   const placeAddButton = document.querySelector('.profile__add-button');
   placeAddButton.addEventListener('click', () => {
-    showPopup(forms.addPlace.popup);
+    forms.addPlace.popup.open();
   });
 
   document.addEventListener('click', (evt) => {
     const target = evt.target;
     if (target.classList.contains('popup')) {
-      hidePopup(target);
+      target.popupObj.close();
     }
   });
 }
@@ -75,13 +68,13 @@ function renderProfile(profile) {
 
 function populateProfileEditInputs(profile) {
   const profileFormObj = forms.profileEdit;
-  const profileEditForm = profileFormObj.form;
   const profileNameField = profileFormObj.fields[0];
   const profileDescriptionField = profileFormObj.fields[1];
   profileNameField.value = profile.name;
   profileDescriptionField.value = profile.about;
-  checkInputValidity(profileEditForm, profileNameField, formSelectors);
-  checkInputValidity(profileEditForm, profileDescriptionField, formSelectors);
+
+  profileFormObj.validator.checkInputValidity(profileNameField);
+  profileFormObj.validator.checkInputValidity(profileDescriptionField);
 }
 
 function renderPage() {
@@ -96,19 +89,14 @@ function renderPage() {
     });
 }
 
-function grabForms(selectors) {
+function initForms(selectors) {
   const forms = Array.from(document.forms);
   let formObjects = {};
-  forms.forEach((form) => {
-    const name = formNames[form.name];
-    const formObj = {
-      form: form,
-      popup: form.closest(selectors.popupSelector),
-      fields: Array.from(form.querySelectorAll(selectors.inputSelector)),
-      submit: form.querySelector(selectors.submitSelector),
-      callback: formSubmitCallabcks[form.name],
-    };
-    formObjects[name] = formObj;
+  forms.forEach((formElement) => {
+    const formName = formNames[formElement.name];
+    const formObj = new Form({ formElement, formName }, selectors);
+    formObj.enableValidation();
+    formObjects[formName] = formObj;
   });
   return formObjects;
 }
@@ -128,13 +116,7 @@ function updateCards(newCards) {
 //----------------------------------//
 addEventListeners(); // In this scope
 
-forms = grabForms(formSelectors); // In this scope
-
-enableForms(forms); // Imported from ./modal.js
-addCloseButtonListeners(); // Imported from ./modal.js
-
-enableFormValidation(forms, formSelectors); // Imported from ./validate.js
-// enableValidation(forms); // Imported from ./validate.js
+forms = initForms(formSelectors); // In this scope
 
 renderPage(); // In this scope
 
