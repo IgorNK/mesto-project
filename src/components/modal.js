@@ -61,7 +61,7 @@ function handleAvatarEditFormSubmit(form) {
       hidePopup(form.popup);
     })
     .catch((err) => {
-      console.log(`EDIT AVATAR ERROR: ${err}`);
+      console.log(`EDIT AVATAR ERROR: ${err} \n ${err.stack}`);
     })
     .finally(() => {
       onProcessingComplete(form, defaultSubmitMessage);
@@ -81,7 +81,7 @@ function handleProfileEditFormSubmit(form) {
       hidePopup(form.popup);
     })
     .catch((err) => {
-      console.log(`EDIT PROFILE ERROR: ${err}`);
+      console.log(`EDIT PROFILE ERROR: ${err} \n ${err.stack}`);
     })
     .finally(() => {
       onProcessingComplete(form, defaultSubmitMessage);
@@ -100,7 +100,7 @@ function handleAddPlaceFormSubmit(form) {
       updateCards(cards.concat(data));
       hidePopup(form.popup);
     })
-    .catch((err) => console.log(`ADD PLACE ERROR: ${err}`))
+    .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`))
     .finally(() => {
       onProcessingComplete(form, defaultSubmitMessage);
     });
@@ -115,7 +115,7 @@ function handleDeletePlaceFormSubmit(form) {
       hidePopup(form.popup);
     })
     .catch((err) => {
-      console.log(`DELETE PLACE ERROR: ${err}`);
+      console.log(`DELETE PLACE ERROR: ${err} \n ${err.stack}`);
     })
     .finally(() => {
       onProcessingComplete(form, confirmSubmitMessage);

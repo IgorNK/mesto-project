@@ -92,7 +92,7 @@ function renderPage() {
       renderProfile(user);
     })
     .catch((err) => {
-      console.log(`ERROR GETTING DATA FROM SERVER: ${err}`);
+      console.log(`ERROR GETTING DATA FROM SERVER: ${err} \n ${err.stack}`);
     });
 }
 
@@ -118,10 +118,10 @@ function updateUser(profile) {
 }
 
 function updateCards(newCards) {
-  newCards.forEach(item => {
+  newCards.forEach((item) => {
     const card = new Card(item, '#card-template');
-    card.renderCard()
-  })
+    card.renderCard();
+  });
 }
 
 // ** ACTUAL PAGE INITIALIZATION ** //
