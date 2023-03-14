@@ -2,7 +2,7 @@
 // ** IMPORTS ** //
 //---------------//
 import '../pages/index.css';
-import { fetchProfile, fetchCards } from './api.js';
+import { api } from './Api.js';
 import Card from './Card';
 import {
   enableForms,
@@ -85,7 +85,7 @@ function populateProfileEditInputs(profile) {
 }
 
 function renderPage() {
-  Promise.all([fetchProfile(), fetchCards()])
+  Promise.all([api.getUserProfile(), api.getInitialCards()])
     .then(([profileData, cardsData]) => {
       updateUser(profileData);
       updateCards(cardsData);
@@ -118,10 +118,10 @@ function updateUser(profile) {
 }
 
 function updateCards(newCards) {
-  newCards.forEach(item => {
+  newCards.forEach((item) => {
     const card = new Card(item, '#card-template');
-    card.renderCard()
-  })
+    card.renderCard();
+  });
 }
 
 // ** ACTUAL PAGE INITIALIZATION ** //

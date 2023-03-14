@@ -1,5 +1,5 @@
 import { user, cards, forms } from './index.js';
-import { requestLike, requestUnlike } from './api.js';
+// import { requestLike, requestUnlike } from './_api.js';
 import { showPopup } from './modal.js';
 import { getLikedPlace } from './utils.js';
 

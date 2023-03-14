@@ -1,11 +1,6 @@
 // ** IMPORTS ** //
 //---------------//
-import {
-  requestAddPlace,
-  requestUpdateAvatar,
-  requestUpdateProfileData,
-  requestDeletePlace,
-} from './api.js';
+import { api } from './Api.js';
 import {
   formSelectors,
   cards,
@@ -54,7 +49,8 @@ function handleAvatarEditFormSubmit(form) {
   const linkField = form.fields[0];
   const newAvatar = linkField.value;
   onProcessingStart(form);
-  requestUpdateAvatar(newAvatar)
+  api
+    .requestUpdateAvatar(newAvatar)
     .then((data) => {
       updateUser(data);
       renderProfile(data);
@@ -74,7 +70,8 @@ function handleProfileEditFormSubmit(form) {
   const newName = nameField.value;
   const newDescription = descriptField.value;
   onProcessingStart(form);
-  requestUpdateProfileData(newName, newDescription)
+  api
+    .requestUpdateProfileData(newName, newDescription)
     .then((data) => {
       updateUser(data);
       renderProfile(data);
@@ -94,7 +91,8 @@ function handleAddPlaceFormSubmit(form) {
   const title = titleField.value;
   const link = linkField.value;
   onProcessingStart(form);
-  requestAddPlace({ title: title, link: link })
+  api
+    .requestAddPlace({ title: title, link: link })
     .then((data) => {
       renderCard(data);
       updateCards(cards.concat(data));
@@ -109,7 +107,8 @@ function handleAddPlaceFormSubmit(form) {
 function handleDeletePlaceFormSubmit(form) {
   onProcessingStart(form);
   const place = form.place;
-  requestDeletePlace(place._id)
+  api
+    .requestDeletePlace(place._id)
     .then((data) => {
       deletePlace(place);
       hidePopup(form.popup);
