@@ -1,12 +1,13 @@
 import { user, forms } from './index.js';
 import { api } from './Api.js';
-import Popup from './Popup.js';
+import PopupWithForm from './PopupWithImage.js';
+
 // import { showPopup } from './modal.js';
 
 const placesContainer = document.querySelector('.cards');
 
 // const popupImage = document.querySelector('.popup__for_image');
-const popupImage = new Popup('.popup__for_image');
+const popupImage = new PopupWithForm('.popup__for_image');
 
 export default class Card {
   constructor(data, cardSelector) {
@@ -96,11 +97,7 @@ export default class Card {
   }
 
   showFullImage() {
-    popupImage.imageElement.src = this._cardImageUrl;
-    popupImage.imageElement.alt = this._cardTitle;
-    popupImage.imageCaption.textContent = this._cardTitle;
-    // showPopup(popupImage);
-    popupImage.open();
+    popupImage.open(this);
   }
 
   _setEventListeners() {

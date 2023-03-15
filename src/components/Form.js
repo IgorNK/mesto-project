@@ -63,11 +63,13 @@ export default class Form {
   //------------------------------//
   _onProcessingStart() {
     this.submit.textContent = processingMessage;
+    this.submit.disabled = true;
   }
 
   _onProcessingComplete(message) {
     this.submit.textContent = message;
     this._reset();
+    this.submit.disabled = false;
   }
 }
 

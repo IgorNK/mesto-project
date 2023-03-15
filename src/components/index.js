@@ -49,7 +49,7 @@ function addEventListeners() {
     forms.addPlace.popup.open();
   });
 
-  document.addEventListener('click', (evt) => {
+  document.addEventListener('mouseup', (evt) => {
     const target = evt.target;
     if (target.classList.contains('popup')) {
       target.popupObj.close();
