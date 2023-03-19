@@ -2,11 +2,7 @@ export default class Popup {
   constructor(selector) {
     this._popupElement = document.querySelector(selector);
     this._popupElement.popupObj = this;
-    this.imageElement = this._popupElement.querySelector('.popup__image');
-    this.imageCaption = this._popupElement.querySelector('.popup__image-caption');
-
     this._setEventListeners();
-
   }
 
   open() {

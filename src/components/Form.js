@@ -1,10 +1,11 @@
 import FormValidator from './FormValidator.js';
-import Popup from './Popup.js';
+import PopupWithForm from './PopupWithForm.js';
+import PopupWithImage from './PopupWithImage.js';
 import Card from './Card.js';
 import { api } from './Api.js';
 import { updateUser, renderProfile } from './index.js';
 
-const formSubmitCallabcks = {
+const formSubmitCallbacks = {
   'avatar-edit': handleAvatarEditFormSubmit,
   'profile-edit': handleProfileEditFormSubmit,
   'add-place': handleAddPlaceFormSubmit,
@@ -21,33 +22,27 @@ export default class Form {
     this.formName = formName;
     this.formElement = formElement;
 
-    this.popup = new Popup(
-      `${selectors.popupSelector}__for_${formElement.name}`
-    );
-
     this.fields = Array.from(
       formElement.querySelectorAll(selectors.inputSelector)
     );
-    this.submit = formElement.querySelector(selectors.submitSelector);
-    this.callback = formSubmitCallabcks[formElement.name];
 
-    this._setEventListeners();
+    this.submit = formElement.querySelector(selectors.submitSelector);
+
+    if (this.submit){
+      this.popup = new PopupWithForm(
+        `${selectors.popupSelector}__for_${formElement.name}`, 
+        () => formSubmitCallbacks[formElement.name].call(this)
+      );
+    }else{
+      this.popup = new PopupWithImage(
+        `${selectors.popupSelector}__for_${formElement.name}`
+      );
+    }
   }
 
   enableValidation() {
     this.validator = new FormValidator(this._selectors, this);
     this.validator.enableValidation();
-  }
-
-  _setEventListeners() {
-    this._addSubmitButtonListener();
-  }
-
-  _addSubmitButtonListener() {
-    this.formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      this.callback();
-    });
   }
 
   _reset() {

@@ -90,9 +90,7 @@ export default class Card {
   }
 
   offerDeletePlace() {
-    // forms.deletePlace.place = this._data;
     forms.deletePlace.card = this;
-    // showPopup(forms.deletePlace.popup);
     forms.deletePlace.popup.open();
   }
 
