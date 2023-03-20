@@ -1,13 +1,4 @@
-import { forms } from './index.js';
 import { api } from './Api.js';
-import PopupWithForm from './PopupWithImage.js';
-
-// import { showPopup } from './modal.js';
-
-//const placesContainer = document.querySelector('.cards');
-
-// const popupImage = document.querySelector('.popup__for_image');
-const popupImage = new PopupWithForm('.popup__for_image');
 
 export default class Card {
   constructor(data, cardSelector) {
@@ -23,7 +14,7 @@ export default class Card {
     this._owner = data.owner;
   }
 
-  createCardElement(currentUserData) {
+  createCardElement({ currentUserData, cardCallback, deleteCallback }) {
     const card = document
       .querySelector(this._selector)
       .content.querySelector('.card')
@@ -56,7 +47,7 @@ export default class Card {
       this._currentLikeCallback = this.addLikeCallback;
     }
 
-    this._setEventListeners(currentUserData);
+    this._setEventListeners(currentUserData, cardCallback, deleteCallback);
 
     return card;
   }
@@ -89,46 +80,26 @@ export default class Card {
       });
   }
 
-  offerDeletePlace() {
-    forms.deletePlace.card = this;
-    forms.deletePlace.popup.open();
-  }
+  // offerDeletePlace() {
+  //   forms.deletePlace.card = this;
+  //   forms.deletePlace.popup.open();
+  // }
 
-  showFullImage() {
-    popupImage.open(this);
-  }
-
-  _setEventListeners(currentUserData) {
+  _setEventListeners(currentUserData, cardCallback, deleteCallback) {
     this._likeButton.addEventListener('click', () => {
       this._currentLikeCallback();
     });
 
     if (this._owner._id == currentUserData._id) {
-      this.cardDeleteButton.addEventListener('click', () => {
-        this.offerDeletePlace();
-      });
+      this.cardDeleteButton.addEventListener('click', deleteCallback);
     } else {
       this.cardDeleteButton.classList.add('card__delete-button_hidden');
     }
 
-    this.cardImageElement.addEventListener('click', () => {
-      this.showFullImage();
-    });
+    this.cardImageElement.addEventListener('click', cardCallback);
   }
 
-  // addCard(card) {
-  //   placesContainer.append(card);
-  // }
-
-  // deleteCard() {
-  //   this._cardElement.remove();
-  // }
-
-  // renderCard() {
-  //   this.addCard(this._createCard());
-  // }
-
-  // renderCardFront() {
-  //   placesContainer.prepend(this._createCard());
-  // }
+  deleteCard() {
+    this._cardElement.remove();
+  }
 }

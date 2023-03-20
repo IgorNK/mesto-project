@@ -1,17 +1,18 @@
-import Popup from "./Popup";
+import Popup from './Popup';
 
-export default class PopupWithImage extends Popup{
-    constructor(selector){
-        super(selector)
-        this.imageElement = this._popupElement.querySelector('.popup__image');
-        this.imageCaption = this._popupElement.querySelector('.popup__image-caption');
-    }
-    open(data){
-        this.imageElement.src = data._cardImageUrl;
-        this.imageElement.alt = data._cardTitle;
-        this.imageCaption.textContent = data._cardTitle;
+export default class PopupWithImage extends Popup {
+  constructor(selector) {
+    super(selector);
+    this.imageElement = this._popupElement.querySelector('.popup__image');
+    this.imageCaption = this._popupElement.querySelector(
+      '.popup__image-caption'
+    );
+  }
+  open(data) {
+    this.imageElement.src = data.link;
+    this.imageElement.alt = data.name;
+    this.imageCaption.textContent = data.name;
 
-        this._popupElement.classList.add('popup_opened');
-        this._addEscapeListener(this);
-    }
+    super.open();
+  }
 }

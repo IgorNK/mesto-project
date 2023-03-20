@@ -1,39 +1,64 @@
 import { api } from './Api.js';
 
 export default class UserInfo {
-  constructor({ nameSelector, aboutSelector }) {
-    console.log(nameSelector);
-    console.log(aboutSelector);
-    this._nameSelector = nameSelector;
-    this._aboutSelector = aboutSelector;
+  constructor({ nameSelector, aboutSelector, avatarSelector }) {
+    this.nameElement = document.querySelector(nameSelector);
+    this.aboutElement = document.querySelector(aboutSelector);
+    this.avatarElement = document.querySelector(avatarSelector);
   }
 
   getUserInfo() {
-    console.log('getUserInfo called');
-    return api.getUserProfile().then((data) => {
-      console.log('profile data: ');
-      console.log(data);
-      return data;
-    });
+    return api
+      .getUserProfile()
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        console.log(`ERROR GETTING USER INFO: ${err} \n ${err.stack}`);
+      });
   }
 
   setUserInfo(newName, newAbout) {
     return api
       .requestUpdateProfileData(newName, newAbout)
       .then((data) => {
-        this._updateUserInfo(data);
+        this.displayUserInfo(data);
       })
       .catch((err) => {
         console.log(`EDIT PROFILE ERROR: ${err} \n ${err.stack}`);
       });
   }
 
+  setUserAvatar(newAvatar) {
+    return api
+      .requestUpdateAvatar(newAvatar)
+      .then((data) => {
+        this.displayAvatar(data.avatar);
+      })
+      .catch((err) => {
+        console.log(`EDIT AVATAR ERROR: ${err} \n ${err.stack}`);
+      });
+  }
+
+  render(userData) {
+    this.displayUserInfo(userData);
+    this.displayAvatar(userData.avatar);
+  }
+
   displayUserInfo(userData) {
-    console.log(
-      'name selector: ' + this._nameSelector + ', about selector: ',
-      this._aboutSelector
-    );
-    document.querySelector(this._nameSelector).textContent = userData.name;
-    document.querySelector(this._aboutSelector).textContent = userData.about;
+    this.nameElement.textContent = userData.name;
+    this.aboutElement.textContent = userData.about;
+  }
+
+  displayAvatar(avatarLink) {
+    this.avatarElement.style.backgroundImage = `url(${avatarLink})`;
   }
 }
+
+const user = new UserInfo({
+  nameSelector: '.profile__name',
+  aboutSelector: '.profile__description',
+  avatarSelector: '.profile__avatar-edit-button',
+});
+
+export { user };

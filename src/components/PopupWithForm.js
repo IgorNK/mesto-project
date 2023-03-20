@@ -1,28 +1,28 @@
-import Popup from "./Popup";
+import Popup from './Popup';
 
-export default class PopupWithForm extends Popup{
-    constructor(selector, callback){
-        super(selector);
-        this.formElement = this._popupElement.querySelector('.form');
-        this.callback = callback;
-    }
-    _getInputValues(){
-        this.callback
-    }
-    _setEventListeners(){
-        this._addCloseButtonListener();
-        this._addSubmitButtonListener();
-    }
+export default class PopupWithForm extends Popup {
+  constructor(selector, callback) {
+    super(selector);
+    this.callback = callback;
+  }
 
-    _addSubmitButtonListener() {
-        this._popupElement.addEventListener('submit', (evt) => {
-          evt.preventDefault();
-        });
-    }
+  _setEventListeners() {
+    super._setEventListeners();
+    this._addSubmitButtonListener();
+  }
 
-    close(){
-        this._popupElement.classList.remove('popup_opened');
-        document.removeEventListener('keydown', this._handleEscClose);
-        this.formElement.reset()
-    }
+  _addSubmitButtonListener() {
+    this._popupElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      this.callback();
+    });
+  }
+
+  close() {
+    this.form.fields.forEach((field) => {
+      this.form.validator.checkInputValidity(field);
+    });
+    this.form.formElement.reset();
+    super.close();
+  }
 }

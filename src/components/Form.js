@@ -1,9 +1,6 @@
 import FormValidator from './FormValidator.js';
-import PopupWithForm from './PopupWithForm.js';
-import PopupWithImage from './PopupWithImage.js';
-import Card from './Card.js';
 import { api } from './Api.js';
-import { updateUser, renderProfileImage } from './index.js';
+import { user } from './UserInfo.js';
 
 const formSubmitCallbacks = {
   'avatar-edit': handleAvatarEditFormSubmit,
@@ -28,16 +25,12 @@ export default class Form {
 
     this.submit = formElement.querySelector(selectors.submitSelector);
 
-    if (this.submit) {
-      this.popup = new PopupWithForm(
-        `${selectors.popupSelector}__for_${formElement.name}`,
-        () => formSubmitCallbacks[formElement.name].call(this)
-      );
-    } else {
-      this.popup = new PopupWithImage(
-        `${selectors.popupSelector}__for_${formElement.name}`
-      );
-    }
+    this.callback = formSubmitCallbacks[formElement.name];
+    // this.popup = new PopupWithForm(
+    //   `${selectors.popupSelector}__for_${formElement.name}`,
+    //   () => formSubmitCallbacks[formElement.name].call(this)
+    // );
+    // this.popup.form = this;
   }
 
   enableValidation() {
@@ -74,11 +67,9 @@ function handleAvatarEditFormSubmit() {
   const linkField = this.fields[0];
   const newAvatar = linkField.value;
   this._onProcessingStart();
-  api
-    .requestUpdateAvatar(newAvatar)
-    .then((data) => {
-      updateUser(data);
-      renderProfileImage(data);
+  return user
+    .setUserAvatar(newAvatar)
+    .then(() => {
       this.popup.close();
     })
     .catch((err) => {
@@ -95,11 +86,9 @@ function handleProfileEditFormSubmit() {
   const newName = nameField.value;
   const newDescription = descriptField.value;
   this._onProcessingStart();
-  api
-    .requestUpdateProfileData(newName, newDescription)
-    .then((data) => {
-      updateUser(data);
-      renderProfile(data);
+  return user
+    .setUserInfo(newName, newDescription)
+    .then(() => {
       this.popup.close();
     })
     .catch((err) => {
@@ -116,11 +105,9 @@ function handleAddPlaceFormSubmit() {
   const title = titleField.value;
   const link = linkField.value;
   this._onProcessingStart();
-  api
+  return api
     .requestAddPlace({ title: title, link: link })
-    .then((data) => {
-      const newCard = new Card(data, '#card-template');
-      newCard.renderCardFront();
+    .then(() => {
       this.popup.close();
     })
     .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`))
@@ -132,10 +119,9 @@ function handleAddPlaceFormSubmit() {
 function handleDeletePlaceFormSubmit() {
   this._onProcessingStart();
   const placeData = this.card._data;
-  api
+  return api
     .requestDeletePlace(placeData._id)
-    .then((data) => {
-      this.card.deleteCard();
+    .then(() => {
       this.popup.close();
     })
     .catch((err) => {
