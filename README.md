@@ -29,5 +29,5 @@
 
 **Авторы**
 Студенты 21-Snow группы Web+
-Назиров Игорь
-Никита Верещагин, gitHub: (https://github.com/Nikita-Vereschagin), e-mail: vereshagin21122006nikita@gmail.com
+- Назиров Игорь, github: (https://github.com/IgorNK), e-mail: mettbs@gmail.com
+- Никита Верещагин, gitHub: (https://github.com/Nikita-Vereschagin), e-mail: vereshagin21122006nikita@gmail.com
