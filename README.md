@@ -28,4 +28,6 @@
 [Mesto - страница на Github.io](https://igornk.github.io/mesto-project/)
 
 **Авторы**
-Назиров Игорь и Никита Верещагин, студенты 21-Snow группы Web+
+Студенты 21-Snow группы Web+
+Назиров Игорь
+Никита Верещагин, gitHub: (https://github.com/Nikita-Vereschagin), e-mail: vereshagin21122006nikita@gmail.com
