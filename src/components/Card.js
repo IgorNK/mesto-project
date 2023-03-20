@@ -1,10 +1,10 @@
-import { user, forms } from './index.js';
+import { forms } from './index.js';
 import { api } from './Api.js';
 import PopupWithForm from './PopupWithImage.js';
 
 // import { showPopup } from './modal.js';
 
-const placesContainer = document.querySelector('.cards');
+//const placesContainer = document.querySelector('.cards');
 
 // const popupImage = document.querySelector('.popup__for_image');
 const popupImage = new PopupWithForm('.popup__for_image');
@@ -23,7 +23,7 @@ export default class Card {
     this._owner = data.owner;
   }
 
-  _createCard() {
+  createCardElement(currentUserData) {
     const card = document
       .querySelector(this._selector)
       .content.querySelector('.card')
@@ -43,7 +43,7 @@ export default class Card {
     this._cardLikeCount.textContent = this._cardLikeCountElement.length;
 
     const liked = this._cardLikeCountElement.reduce((me, profile) => {
-      return profile._id == user._id;
+      return profile._id == currentUserData._id;
     }, false);
 
     this._currentLikeCallback = function () {};
@@ -56,7 +56,7 @@ export default class Card {
       this._currentLikeCallback = this.addLikeCallback;
     }
 
-    this._setEventListeners();
+    this._setEventListeners(currentUserData);
 
     return card;
   }
@@ -98,12 +98,12 @@ export default class Card {
     popupImage.open(this);
   }
 
-  _setEventListeners() {
+  _setEventListeners(currentUserData) {
     this._likeButton.addEventListener('click', () => {
       this._currentLikeCallback();
     });
 
-    if (this._owner._id == user._id) {
+    if (this._owner._id == currentUserData._id) {
       this.cardDeleteButton.addEventListener('click', () => {
         this.offerDeletePlace();
       });
@@ -116,19 +116,19 @@ export default class Card {
     });
   }
 
-  addCard(card) {
-    placesContainer.append(card);
-  }
+  // addCard(card) {
+  //   placesContainer.append(card);
+  // }
 
-  deleteCard() {
-    this._cardElement.remove();
-  }
+  // deleteCard() {
+  //   this._cardElement.remove();
+  // }
 
-  renderCard() {
-    this.addCard(this._createCard());
-  }
+  // renderCard() {
+  //   this.addCard(this._createCard());
+  // }
 
-  renderCardFront() {
-    placesContainer.prepend(this._createCard());
-  }
+  // renderCardFront() {
+  //   placesContainer.prepend(this._createCard());
+  // }
 }

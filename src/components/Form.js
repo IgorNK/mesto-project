@@ -3,7 +3,7 @@ import PopupWithForm from './PopupWithForm.js';
 import PopupWithImage from './PopupWithImage.js';
 import Card from './Card.js';
 import { api } from './Api.js';
-import { updateUser, renderProfile } from './index.js';
+import { updateUser, renderProfileImage } from './index.js';
 
 const formSubmitCallbacks = {
   'avatar-edit': handleAvatarEditFormSubmit,
@@ -28,12 +28,12 @@ export default class Form {
 
     this.submit = formElement.querySelector(selectors.submitSelector);
 
-    if (this.submit){
+    if (this.submit) {
       this.popup = new PopupWithForm(
-        `${selectors.popupSelector}__for_${formElement.name}`, 
+        `${selectors.popupSelector}__for_${formElement.name}`,
         () => formSubmitCallbacks[formElement.name].call(this)
       );
-    }else{
+    } else {
       this.popup = new PopupWithImage(
         `${selectors.popupSelector}__for_${formElement.name}`
       );
@@ -78,7 +78,7 @@ function handleAvatarEditFormSubmit() {
     .requestUpdateAvatar(newAvatar)
     .then((data) => {
       updateUser(data);
-      renderProfile(data);
+      renderProfileImage(data);
       this.popup.close();
     })
     .catch((err) => {

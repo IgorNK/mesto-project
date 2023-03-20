@@ -5,8 +5,17 @@ import '../pages/index.css';
 import { api } from './Api.js';
 import Card from './Card.js';
 import Form from './Form.js';
+import Section from './Section.js';
+import UserInfo from './UserInfo.js';
 
-let user;
+//const profileName = document.querySelector('.profile__name');
+//const profileDescription = document.querySelector('.profile__description');
+
+const user = new UserInfo({
+  nameSelector: '.profile__name',
+  aboutSelector: '.profile__description',
+});
+
 let cards = [];
 let forms;
 
@@ -16,6 +25,9 @@ const formNames = {
   'add-place': 'addPlace',
   'delete-place': 'deletePlace',
 };
+
+const cardContainerSelector = '.cards';
+const defaultCardSelector = '#card-template';
 
 const formSelectors = {
   popupSelector: '.popup',
@@ -57,12 +69,10 @@ function addEventListeners() {
   });
 }
 
-const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
-const profilePic = document.querySelector('.profile__avatar-edit-button');
-function renderProfile(profile) {
-  profileName.textContent = profile.name;
-  profileDescription.textContent = profile.about;
+function renderProfileImage(profile) {
+  console.log('profile: ');
+  console.log(profile);
+  const profilePic = document.querySelector('.profile__avatar-edit-button');
   profilePic.style.backgroundImage = `url(${profile.avatar})`;
 }
 
@@ -78,14 +88,14 @@ function populateProfileEditInputs(profile) {
 }
 
 function renderPage() {
-  Promise.all([api.getUserProfile(), api.getInitialCards()])
+  Promise.all([user.getUserInfo(), api.getInitialCards()])
     .then(([profileData, cardsData]) => {
-      updateUser(profileData);
-      updateCards(cardsData);
-      renderProfile(user);
+      renderCards(cardsData, profileData);
+      renderProfileImage(profileData);
+      user.displayUserInfo(profileData);
     })
     .catch((err) => {
-      console.log(`ERROR GETTING DATA FROM SERVER: ${err}`);
+      console.log(`ERROR GETTING DATA FROM SERVER: ${err} \n ${err.stack}`);
     });
 }
 
@@ -105,11 +115,20 @@ function updateUser(profile) {
   user = profile;
 }
 
-function updateCards(newCards) {
-  newCards.forEach((item) => {
-    const card = new Card(item, '#card-template');
-    card.renderCard();
-  });
+function renderCards(newCards, profileData) {
+  console.log(newCards);
+  cards = new Section(
+    {
+      items: newCards,
+      render: (item) => {
+        const card = new Card(item, defaultCardSelector);
+        const cardElement = card.createCardElement(profileData);
+        cards._container.append(cardElement);
+      },
+    },
+    cardContainerSelector
+  );
+  cards.renderItems();
 }
 
 // ** ACTUAL PAGE INITIALIZATION ** //
@@ -120,12 +139,4 @@ forms = initForms(formSelectors); // In this scope
 
 renderPage(); // In this scope
 
-export {
-  user,
-  cards,
-  forms,
-  formSelectors,
-  updateUser,
-  updateCards,
-  renderProfile,
-};
+export { user, forms, updateUser, renderProfileImage };

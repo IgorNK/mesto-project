@@ -41,7 +41,7 @@ export default class FormValidator {
     }
   }
 
-  //This function is only used when checking button state.
+  //This method is only used when checking button state.
   //Regular input checking is done in checkInputValidity method.
   _hasInvalidInput(fields) {
     return fields.some((field) => {
