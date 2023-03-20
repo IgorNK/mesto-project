@@ -19,7 +19,7 @@ export default class Popup {
     this._addCloseButtonListener();
   }
 
-  _handleEscClose(evt) {}
+  _handleEscClose(evt) { }
 
   _addEscapeListener(popup) {
     document.addEventListener(
