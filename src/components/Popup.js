@@ -19,18 +19,15 @@ export default class Popup {
     this._addCloseButtonListener();
   }
 
-  _handleEscClose(evt) {}
+  _handleEscClose = (evt) => {
+    if (evt.key === 'Escape') {
+      document.activeElement.blur();
+      this.close();
+    }
+  };
 
   _addEscapeListener(popup) {
-    document.addEventListener(
-      'keydown',
-      (this._handleEscClose = function (evt) {
-        if (evt.key === 'Escape') {
-          document.activeElement.blur();
-          popup.close();
-        }
-      })
-    );
+    document.addEventListener('keydown', this._handleEscClose);
   }
 
   _addCloseButtonListener() {

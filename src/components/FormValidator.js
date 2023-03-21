@@ -35,6 +35,7 @@ export default class FormValidator {
       const errorElement = getErrorElement(this._form, field);
       this._hideInputError(errorElement, this._selectors.activeInputErrorClass);
     });
+    this._disableButton(this._submit, this._selectors.inactiveSubmitClass);
   }
 
   checkInputValidity(field) {
