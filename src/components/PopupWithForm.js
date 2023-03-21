@@ -14,9 +14,6 @@ export default class PopupWithForm extends Popup {
     );
     this._submit = this.form.querySelector(formElementSelectors.submitSelector);
     this._defaultSubmitMessage = this._submit.textContent;
-    this._error = this.form.querySelector(
-      formElementSelectors.inputErrorSelector
-    );
   }
 
   _setEventListeners() {
@@ -65,7 +62,7 @@ export default class PopupWithForm extends Popup {
     if (this._inputs == null) {
       return;
     }
-    this.validator.toggleButtonState(this._submit, this._inputs);
+    this.validator.clearValidation();
   }
 
   // ** SAVE PROCESS RENDERING ** //

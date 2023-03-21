@@ -20,6 +20,7 @@ const cardContainerSelector = '.cards';
 const defaultCardSelector = '#card-template';
 
 const processingMessage = 'Saving...';
+const defaultConfirmMessage = 'Да';
 
 const apiconfig = {
   baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
@@ -47,6 +48,7 @@ export {
   cardContainerSelector,
   defaultCardSelector,
   processingMessage,
+  defaultConfirmMessage,
   apiconfig,
   userInfoSelectors,
   sections,

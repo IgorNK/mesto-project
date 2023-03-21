@@ -30,6 +30,13 @@ export default class FormValidator {
     }
   }
 
+  clearValidation() {
+    this._inputs.forEach((field) => {
+      const errorElement = getErrorElement(this._form, field);
+      this._hideInputError(errorElement, this._selectors.activeInputErrorClass);
+    });
+  }
+
   checkInputValidity(field) {
     const errorElement = getErrorElement(this._form, field);
 

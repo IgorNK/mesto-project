@@ -86,7 +86,10 @@ function initPopups(popups, selectors) {
         newPopup = new PopupWithImage(selectors[popupName]);
         break;
       case 'deletePlace':
-        newPopup = new PopupWithConfirmation(selectors[popupName]);
+        newPopup = new PopupWithConfirmation(selectors[popupName], {
+          callback: handleDeletePlaceFormSubmit.bind(newPopup),
+          formElementSelectors: formElementSelectors,
+        });
         break;
       case 'profileEdit':
         newPopup = new PopupWithForm(selectors[popupName], {
@@ -140,12 +143,9 @@ function createCardElement(cardData, profileData) {
     cardCallback: function () {
       popups.image.open(cardData);
     },
-    deleteCallback: function () {
-      popups.deletePlace.form.card = card;
-      popups.deletePlace.open();
-    },
     addLikeCallback: addLikeCallback.bind(card),
     removeLikeCallback: removeLikeCallback.bind(card),
+    deleteCardCallback: deleteCardCallback.bind(card),
   });
   return cardElement;
 }
@@ -187,22 +187,25 @@ function handleAddPlaceFormSubmit(values) {
     .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`));
 }
 
-function handleDeletePlaceFormSubmit(values) {
-  return api.requestDeletePlace(placeData._id).catch((err) => {
-    console.log(`DELETE PLACE ERROR: ${err} \n ${err.stack}`);
-  });
+function handleDeletePlaceFormSubmit(card) {
+  return api
+    .requestDeletePlace(card._cardId)
+    .then((data) => {
+      card.deleteCard();
+    })
+    .catch((err) => {
+      console.log(`DELETE PLACE ERROR: ${err} \n ${err.stack}`);
+    });
 }
 
 // ********* CARD CALLBACKS ******** //
 //-----------------------------------//
 function addLikeCallback() {
-  this._currentLikeCallback = this.removeLikeCallback;
+  this._currentLikeCallback = removeLikeCallback.bind(this);
   api
     .requestLike(this._cardId)
-    .then(() => {
-      this._likeButton.classList.add('card__like-button_active');
-      this._cardLikeCount.textContent =
-        parseInt(this._cardLikeCount.textContent) + 1;
+    .then((data) => {
+      this._updateLikesCount(data.likes);
     })
     .catch((err) => {
       console.log(`LIKE REQUEST ERROR: ${err} \n ${err.stack}`);
@@ -210,17 +213,20 @@ function addLikeCallback() {
 }
 
 function removeLikeCallback() {
-  this._currentLikeCallback = this.addLikeCallback;
+  this._currentLikeCallback = addLikeCallback.bind(this);
   api
     .requestUnlike(this._cardId)
-    .then(() => {
-      this._likeButton.classList.remove('card__like-button_active');
-      this._cardLikeCount.textContent =
-        parseInt(this._cardLikeCount.textContent) - 1;
+    .then((data) => {
+      this._updateLikesCount(data.likes);
     })
     .catch((err) => {
       console.log(`UNLIKE REQUEST ERROR: ${err} \n ${err.stack}`);
     });
+}
+
+function deleteCardCallback() {
+  popups.deletePlace.setCard(this);
+  popups.deletePlace.open();
 }
 
 // ** ACTUAL PAGE INITIALIZATION ** //
