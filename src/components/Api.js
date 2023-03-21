@@ -71,13 +71,13 @@ export default class Api {
     });
   }
 
-  requestUpdateProfileData(newName, newDescription) {
+  requestUpdateProfileData({ username, description }) {
     return fetch(`${this._config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._config.headers,
       body: JSON.stringify({
-        name: newName,
-        about: newDescription,
+        name: username,
+        about: description,
       }),
     }).then((res) => {
       return _checkResponse(res);
@@ -91,13 +91,3 @@ function _checkResponse(res) {
   }
   return Promise.reject(res.status);
 }
-
-const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
-  headers: {
-    authorization: 'aeccfdf1-17cb-4e9d-8818-d4f10c28a16b',
-    'Content-type': 'application/json',
-  },
-});
-
-export { api };

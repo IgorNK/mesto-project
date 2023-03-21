@@ -1,13 +1,22 @@
-import { getErrorElement } from './utils.js';
+import { getErrorElement } from '../utils/utils.js';
 
 export default class FormValidator {
-  constructor(formSelectors, formObj) {
-    this._selectors = formSelectors;
-    this._formObj = formObj;
+  constructor(formElementSelectors, formElement) {
+    this._selectors = formElementSelectors;
+    this._form = formElement;
+    this._inputs = Array.from(
+      this._form.querySelectorAll(formElementSelectors.inputSelector)
+    );
+    this._submit = this._form.querySelector(
+      formElementSelectors.submitSelector
+    );
+    this._error = this._form.querySelector(
+      formElementSelectors.inputErrorSelector
+    );
   }
 
   enableValidation() {
-    this._formObj.formElement.addEventListener('submit', (e) => {
+    this._form.addEventListener('submit', (e) => {
       e.preventDefault();
     });
     this._addFieldInputListeners();
@@ -22,7 +31,7 @@ export default class FormValidator {
   }
 
   checkInputValidity(field) {
-    const errorElement = getErrorElement(this._formObj.formElement, field);
+    const errorElement = getErrorElement(this._form, field);
 
     if (field.validity.patternMismatch) {
       field.setCustomValidity(field.dataset.errorMessage);
@@ -52,15 +61,15 @@ export default class FormValidator {
   }
 
   _addFieldInputListeners() {
-    if (this._formObj.fields.length == 0) {
+    if (this._inputs.length == 0) {
       return;
     }
 
-    this.toggleButtonState(this._formObj.submit, this._formObj.fields);
-    this._formObj.fields.forEach((field) => {
+    this.toggleButtonState(this._submit, this._inputs);
+    this._inputs.forEach((field) => {
       field.addEventListener('input', () => {
         this.checkInputValidity(field);
-        this.toggleButtonState(this._formObj.submit, this._formObj.fields);
+        this.toggleButtonState(this._submit, this._inputs);
       });
     });
   }

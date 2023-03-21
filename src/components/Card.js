@@ -1,5 +1,3 @@
-import { api } from './Api.js';
-
 export default class Card {
   constructor(data, cardSelector) {
     this._selector = cardSelector;
@@ -14,7 +12,13 @@ export default class Card {
     this._owner = data.owner;
   }
 
-  createCardElement({ currentUserData, cardCallback, deleteCallback }) {
+  createCardElement({
+    currentUserData,
+    cardCallback,
+    deleteCallback,
+    addLikeCallback,
+    removeLikeCallback,
+  }) {
     const card = document
       .querySelector(this._selector)
       .content.querySelector('.card')
@@ -41,49 +45,16 @@ export default class Card {
 
     if (liked) {
       this._likeButton.classList.add('card__like-button_active');
-      this._currentLikeCallback = this.removeLikeCallback;
+      this._currentLikeCallback = removeLikeCallback;
     } else {
       this._likeButton.classList.remove('card__like-button_active');
-      this._currentLikeCallback = this.addLikeCallback;
+      this._currentLikeCallback = addLikeCallback;
     }
 
     this._setEventListeners(currentUserData, cardCallback, deleteCallback);
 
     return card;
   }
-
-  addLikeCallback() {
-    this._currentLikeCallback = this.removeLikeCallback;
-    api
-      .requestLike(this._cardId)
-      .then(() => {
-        this._likeButton.classList.add('card__like-button_active');
-        this._cardLikeCount.textContent =
-          parseInt(this._cardLikeCount.textContent) + 1;
-      })
-      .catch((err) => {
-        console.log(`LIKE REQUEST ERROR: ${err} \n ${err.stack}`);
-      });
-  }
-
-  removeLikeCallback() {
-    this._currentLikeCallback = this.addLikeCallback;
-    api
-      .requestUnlike(this._cardId)
-      .then(() => {
-        this._likeButton.classList.remove('card__like-button_active');
-        this._cardLikeCount.textContent =
-          parseInt(this._cardLikeCount.textContent) - 1;
-      })
-      .catch((err) => {
-        console.log(`UNLIKE REQUEST ERROR: ${err} \n ${err.stack}`);
-      });
-  }
-
-  // offerDeletePlace() {
-  //   forms.deletePlace.card = this;
-  //   forms.deletePlace.popup.open();
-  // }
 
   _setEventListeners(currentUserData, cardCallback, deleteCallback) {
     this._likeButton.addEventListener('click', () => {
