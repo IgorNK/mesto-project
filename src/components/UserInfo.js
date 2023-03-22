@@ -9,8 +9,11 @@ export default class UserInfo {
     return {
       username: this._nameElement.textContent,
       description: this._aboutElement.textContent,
-      _id: this._id,
     };
+  }
+
+  getUserId() {
+    return this._id;
   }
 
   setUserInfo({ name, about, _id }) {

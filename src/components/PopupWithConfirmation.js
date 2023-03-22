@@ -5,12 +5,15 @@ import {
 } from '../utils/constants.js';
 
 export default class PopupWithConfirmation extends Popup {
-  constructor(selector, { callback, formElementSelectors }) {
+  constructor(selector, { formElementSelectors }) {
     super(selector);
-    this._callback = callback;
     this._submit = this._popupElement.querySelector(
       formElementSelectors.submitSelector
     );
+  }
+
+  assignCallback({ callback }) {
+    this._callback = callback;
   }
 
   setCard(card) {
@@ -26,11 +29,7 @@ export default class PopupWithConfirmation extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._onProcessingStart();
-      this._callback(this._card).finally(() => {
-        this._onProcessingComplete();
-        this._card = null;
-        this.close();
-      });
+      this._callback();
     });
   }
 

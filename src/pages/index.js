@@ -70,7 +70,7 @@ function renderPage() {
         _id: profileData._id,
       });
       userInfo.setUserAvatar(profileData.avatar);
-      sections.cards = createCards(cardsData, profileData);
+      sections.cards = createCards(cardsData);
       sections.cards.renderItems();
     })
     .catch((err) => {
@@ -87,28 +87,36 @@ function initPopups(popups, selectors) {
         break;
       case 'deletePlace':
         newPopup = new PopupWithConfirmation(selectors[popupName], {
-          callback: handleDeletePlaceFormSubmit.bind(newPopup),
           formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleDeletePlaceFormSubmit.bind(newPopup),
         });
         break;
       case 'profileEdit':
         newPopup = new PopupWithForm(selectors[popupName], {
-          callback: handleProfileEditFormSubmit.bind(newPopup),
           formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleProfileEditFormSubmit.bind(newPopup),
         });
         assignValidator(newPopup).enableValidation();
         break;
       case 'avatarEdit':
         newPopup = new PopupWithForm(selectors[popupName], {
-          callback: handleAvatarEditFormSubmit.bind(newPopup),
           formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleAvatarEditFormSubmit.bind(newPopup),
         });
         assignValidator(newPopup).enableValidation();
         break;
       case 'addPlace':
         newPopup = new PopupWithForm(selectors[popupName], {
-          callback: handleAddPlaceFormSubmit.bind(newPopup),
           formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleAddPlaceFormSubmit.bind(newPopup),
         });
         assignValidator(newPopup).enableValidation();
         break;
@@ -123,12 +131,12 @@ function assignValidator(popup) {
   return popup.validator;
 }
 
-function createCards(newCards, profileData) {
-  let cards = new Section(
+function createCards(newCards) {
+  const cards = new Section(
     {
       items: newCards,
       render: (item) => {
-        cards._container.append(createCardElement(item, profileData));
+        cards._container.append(createCardElement(item));
       },
     },
     cardContainerSelector
@@ -136,10 +144,10 @@ function createCards(newCards, profileData) {
   return cards;
 }
 
-function createCardElement(cardData, profileData) {
+function createCardElement(cardData) {
   const card = new Card(cardData, defaultCardSelector);
   const cardElement = card.createCardElement({
-    currentUserData: profileData,
+    currentUserId: userInfo.getUserId(),
     cardCallback: function () {
       popups.image.open(cardData);
     },
@@ -153,10 +161,14 @@ function createCardElement(cardData, profileData) {
 // ** FORM SUBMIT EVENT CALLBACKS ** //
 //-----------------------------------//
 function handleAvatarEditFormSubmit(values) {
-  return api
+  // console.log('handle avatar edit this:');
+  // console.log(this);
+  api
     .requestUpdateAvatar(values.link)
     .then((data) => {
       userInfo.setUserAvatar(data.avatar);
+      this._onProcessingComplete();
+      this.close();
     })
     .catch((err) => {
       console.log(`EDIT AVATAR ERROR: ${err} \n ${err.stack}`);
@@ -164,13 +176,17 @@ function handleAvatarEditFormSubmit(values) {
 }
 
 function handleProfileEditFormSubmit(values) {
-  return api
+  // console.log('handle profile edit this:');
+  // console.log(this);
+  api
     .requestUpdateProfileData({
       username: values.username,
       description: values.description,
     })
     .then((data) => {
       userInfo.setUserInfo(data);
+      this._onProcessingComplete();
+      this.close();
     })
     .catch((err) => {
       console.log(`EDIT PROFILE ERROR: ${err} \n ${err.stack}`);
@@ -178,20 +194,29 @@ function handleProfileEditFormSubmit(values) {
 }
 
 function handleAddPlaceFormSubmit(values) {
-  return api
+  // console.log('handle add place this:');
+  // console.log(this);
+  api
     .requestAddPlace({ title: values.title, link: values.link })
     .then((data) => {
-      const newCardElement = createCardElement(data, userInfo.getUserInfo());
+      const newCardElement = createCardElement(data, userInfo.getUserId());
       sections.cards.addItem(newCardElement);
+      this._onProcessingComplete();
+      this.close();
     })
     .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`));
 }
 
-function handleDeletePlaceFormSubmit(card) {
-  return api
-    .requestDeletePlace(card._cardId)
+function handleDeletePlaceFormSubmit() {
+  // console.log('handle delete place this:');
+  // console.log(this);
+  api
+    .requestDeletePlace(this._card._cardId)
     .then((data) => {
-      card.deleteCard();
+      this._card.deleteCard();
+      this._onProcessingComplete();
+      this._card = null;
+      this.close();
     })
     .catch((err) => {
       console.log(`DELETE PLACE ERROR: ${err} \n ${err.stack}`);
@@ -201,6 +226,8 @@ function handleDeletePlaceFormSubmit(card) {
 // ********* CARD CALLBACKS ******** //
 //-----------------------------------//
 function addLikeCallback() {
+  // console.log('add like this:');
+  // console.log(this);
   this._currentLikeCallback = removeLikeCallback.bind(this);
   api
     .requestLike(this._cardId)

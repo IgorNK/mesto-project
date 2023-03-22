@@ -7,11 +7,11 @@ export default class Card {
     this._cardLikeCountElement = data.likes;
     this._cardId = data._id;
 
-    this._owner = data.owner;
+    this._ownerId = data.owner._id;
   }
 
   createCardElement({
-    currentUserData,
+    currentUserId,
     cardCallback,
     addLikeCallback,
     removeLikeCallback,
@@ -36,7 +36,7 @@ export default class Card {
     this._cardLikeCount.textContent = this._cardLikeCountElement.length;
 
     const liked = this._cardLikeCountElement.reduce((me, profile) => {
-      return profile._id == currentUserData._id;
+      return profile._id == currentUserId;
     }, false);
 
     this._currentLikeCallback = function () {};
@@ -49,17 +49,17 @@ export default class Card {
       this._currentLikeCallback = addLikeCallback;
     }
 
-    this._setEventListeners(currentUserData, cardCallback, deleteCardCallback);
+    this._setEventListeners(currentUserId, cardCallback, deleteCardCallback);
 
     return card;
   }
 
-  _setEventListeners(currentUserData, cardCallback, deleteCardCallback) {
+  _setEventListeners(currentUserId, cardCallback, deleteCardCallback) {
     this._likeButton.addEventListener('click', () => {
       this._currentLikeCallback();
     });
 
-    if (this._owner._id == currentUserData._id) {
+    if (this._ownerId == currentUserId) {
       this.cardDeleteButton.addEventListener('click', deleteCardCallback);
     } else {
       this.cardDeleteButton.classList.add('card__delete-button_hidden');

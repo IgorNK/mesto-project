@@ -2,9 +2,8 @@ import Popup from './Popup.js';
 import { processingMessage } from '../utils/constants.js';
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, { callback, formElementSelectors }) {
+  constructor(selector, { formElementSelectors }) {
     super(selector);
-    this._callback = callback;
     this._formElementSelectors = formElementSelectors;
     this.form = this._popupElement.querySelector(
       formElementSelectors.formSelector
@@ -16,6 +15,10 @@ export default class PopupWithForm extends Popup {
     this._defaultSubmitMessage = this._submit.textContent;
   }
 
+  assignCallback({ callback }) {
+    this._callback = callback;
+  }
+
   _setEventListeners() {
     super._setEventListeners();
     this._addSubmitButtonListener();
@@ -25,10 +28,7 @@ export default class PopupWithForm extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._onProcessingStart();
-      this._callback(this._getInputValues()).finally(() => {
-        this._onProcessingComplete();
-        this.close();
-      });
+      this._callback(this._getInputValues());
     });
   }
 
@@ -50,7 +50,7 @@ export default class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    let inputValues = {};
+    const inputValues = {};
     this._inputs.forEach((input) => {
       inputValues[input.name] = input.value;
     });
