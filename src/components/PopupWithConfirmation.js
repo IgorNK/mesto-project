@@ -29,7 +29,7 @@ export default class PopupWithConfirmation extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._onProcessingStart();
-      this._callback();
+      this._callback(this._card);
     });
   }
 
@@ -40,7 +40,7 @@ export default class PopupWithConfirmation extends Popup {
     this._submit.disabled = true;
   }
 
-  _onProcessingComplete() {
+  onProcessingComplete() {
     this._submit.textContent = defaultConfirmMessage;
     this._submit.disabled = false;
   }

@@ -136,7 +136,7 @@ function createCards(newCards) {
     {
       items: newCards,
       render: (item) => {
-        cards._container.append(createCardElement(item));
+        cards.container.append(createCardElement(item));
       },
     },
     cardContainerSelector
@@ -167,11 +167,13 @@ function handleAvatarEditFormSubmit(values) {
     .requestUpdateAvatar(values.link)
     .then((data) => {
       userInfo.setUserAvatar(data.avatar);
-      this._onProcessingComplete();
       this.close();
     })
     .catch((err) => {
       console.log(`EDIT AVATAR ERROR: ${err} \n ${err.stack}`);
+    })
+    .finally(() => {
+      this.onProcessingComplete();
     });
 }
 
@@ -185,11 +187,13 @@ function handleProfileEditFormSubmit(values) {
     })
     .then((data) => {
       userInfo.setUserInfo(data);
-      this._onProcessingComplete();
       this.close();
     })
     .catch((err) => {
       console.log(`EDIT PROFILE ERROR: ${err} \n ${err.stack}`);
+    })
+    .finally(() => {
+      this.onProcessingComplete();
     });
 }
 
@@ -201,50 +205,54 @@ function handleAddPlaceFormSubmit(values) {
     .then((data) => {
       const newCardElement = createCardElement(data, userInfo.getUserId());
       sections.cards.addItem(newCardElement);
-      this._onProcessingComplete();
       this.close();
     })
-    .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`));
+    .catch((err) => console.log(`ADD PLACE ERROR: ${err} \n ${err.stack}`))
+    .finally(() => {
+      this.onProcessingComplete();
+    });
 }
 
-function handleDeletePlaceFormSubmit() {
+function handleDeletePlaceFormSubmit(card) {
   // console.log('handle delete place this:');
   // console.log(this);
   api
-    .requestDeletePlace(this._card._cardId)
+    .requestDeletePlace(card.cardId)
     .then((data) => {
-      this._card.deleteCard();
-      this._onProcessingComplete();
-      this._card = null;
+      card.deleteCard();
+      card = null;
       this.close();
     })
     .catch((err) => {
       console.log(`DELETE PLACE ERROR: ${err} \n ${err.stack}`);
+    })
+    .then(() => {
+      this.onProcessingComplete();
     });
 }
 
 // ********* CARD CALLBACKS ******** //
 //-----------------------------------//
-function addLikeCallback() {
+function addLikeCallback(card) {
   // console.log('add like this:');
   // console.log(this);
-  this._currentLikeCallback = removeLikeCallback.bind(this);
+  card.currentLikeCallback = removeLikeCallback.bind(card);
   api
-    .requestLike(this._cardId)
+    .requestLike(card.cardId)
     .then((data) => {
-      this._updateLikesCount(data.likes);
+      card.updateLikesCount(data.likes);
     })
     .catch((err) => {
       console.log(`LIKE REQUEST ERROR: ${err} \n ${err.stack}`);
     });
 }
 
-function removeLikeCallback() {
-  this._currentLikeCallback = addLikeCallback.bind(this);
+function removeLikeCallback(card) {
+  card.currentLikeCallback = addLikeCallback.bind(card);
   api
-    .requestUnlike(this._cardId)
+    .requestUnlike(card.cardId)
     .then((data) => {
-      this._updateLikesCount(data.likes);
+      card.updateLikesCount(data.likes);
     })
     .catch((err) => {
       console.log(`UNLIKE REQUEST ERROR: ${err} \n ${err.stack}`);

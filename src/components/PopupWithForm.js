@@ -72,7 +72,7 @@ export default class PopupWithForm extends Popup {
     this._submit.disabled = true;
   }
 
-  _onProcessingComplete() {
+  onProcessingComplete() {
     this._submit.textContent = this._defaultSubmitMessage;
     this._resetForm();
     this._submit.disabled = false;

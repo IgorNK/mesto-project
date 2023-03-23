@@ -5,7 +5,7 @@ export default class Card {
     this._cardTitle = data.name;
     this._cardImageUrl = data.link;
     this._cardLikeCountElement = data.likes;
-    this._cardId = data._id;
+    this.cardId = data._id;
 
     this._ownerId = data.owner._id;
   }
@@ -43,10 +43,10 @@ export default class Card {
 
     if (liked) {
       this._likeButton.classList.add('card__like-button_active');
-      this._currentLikeCallback = removeLikeCallback;
+      this.currentLikeCallback = removeLikeCallback;
     } else {
       this._likeButton.classList.remove('card__like-button_active');
-      this._currentLikeCallback = addLikeCallback;
+      this.currentLikeCallback = addLikeCallback;
     }
 
     this._setEventListeners(currentUserId, cardCallback, deleteCardCallback);
@@ -56,7 +56,7 @@ export default class Card {
 
   _setEventListeners(currentUserId, cardCallback, deleteCardCallback) {
     this._likeButton.addEventListener('click', () => {
-      this._currentLikeCallback();
+      this.currentLikeCallback(this);
     });
 
     if (this._ownerId == currentUserId) {
@@ -68,7 +68,7 @@ export default class Card {
     this.cardImageElement.addEventListener('click', cardCallback);
   }
 
-  _updateLikesCount(likes) {
+  updateLikesCount(likes) {
     this._likeButton.classList.toggle('card__like-button_active');
     this._cardLikeCount.textContent = likes.length;
   }
