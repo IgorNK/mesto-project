@@ -4,6 +4,8 @@ const popupSelectors = {
   addPlace: '.popup__for_add-place',
   image: '.popup__for_image',
   deletePlace: '.popup__for_delete-place',
+  login: '.popup__for_sign-in',
+  register: '.popup__for_sign-up',
 };
 
 const formElementSelectors = {
@@ -23,7 +25,8 @@ const processingMessage = 'Saving...';
 const defaultConfirmMessage = 'Да';
 
 const apiconfig = {
-  baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
+  //baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
+  baseUrl: 'https://mesto-project-plus.metsysfhtagn.repl.co',
   headers: {
     authorization: 'aeccfdf1-17cb-4e9d-8818-d4f10c28a16b',
     'Content-type': 'application/json',

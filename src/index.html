@@ -16,6 +16,11 @@
 
     <header class="header page__header">
       <img class="header__logo" src="<%=require('./images/mesto-logo.svg')%>" alt="Mesto">
+      <div class="header__profile-actions">
+        <button class="header__sign-in-button" type="button">Sign In</button>
+        <button class="header__register-button" type="button">Register</button>
+      </div>
+      
     </header>
 
     <main class="content">
@@ -72,6 +77,36 @@
       </div>
     </div>
 
+    <div class="popup popup__for_sign-in">
+      <div class="popup__container">
+        <button class="popup__close-button" type="button"></button>
+        <form class="form" name="sign-in" novalidate>
+          <h2 class="popup__heading">Войти</h2>
+          <input class="form__field form__field_email" id="email-field" type="text" name="email" minlength="2"
+            placeholder="Введите Ваш email" data-error-message="Not a valid e-mail address." required>
+          <span class="form__field-error email-field-error"></span>
+          <input class="form__field form__field_password" id="password-field" type="password" name="password" minlength="6" data-error-message="Password needs to be at least 6 symbols long." requied>
+          <span class="form__field-error password-field-error"></span>
+          <button class="form__button form__button_sign-in" type=submit>Войти</button>
+        </form> 
+      </div>
+    </div>
+
+    <div class="popup popup__for_sign-up">
+      <div class="popup__container">
+        <button class="popup__close-button" type="button"></button>
+        <form class="form" name="sign-up" novalidate>
+          <h2 class="popup__heading">Регистрация</h2>
+          <input class="form__field form__field_email" id="email-register-field" type="text" name="email" minlength="2" placeholder="Введите Ваш email" data-error-message="Not a valid e-mail address." required>
+          <span class="form__field-error email-register-field-error"></span>
+          <input class="form__field form__field_password" id="password-register-field" type="password" name="password" minlength="6" data-error-message="Password needs to be at least 6 symbols long." required>
+          <span class="form__field-error password-register-field-error"></span>
+          <input class="form__field form__field_password" id="password-confirm-field" type="password" name="password-confirm" minlength="6" data-error-message="Password needs to be at least 6 symbols long. Password fields must match." required>
+          <span class="form__field-error password-confirm-field-error"></span>
+          <button class="form__button form__button_sign-up" type=submit>Зарегистрироваться</button>
+        </form>
+      </div>
+    </div>
 
     <div class="popup popup__for_add-place">
       <div class="popup__container">

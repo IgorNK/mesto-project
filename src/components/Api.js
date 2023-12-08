@@ -19,6 +19,24 @@ export default class Api {
     });
   }
 
+  requestLogin({email, password}) {
+    return fetch(`${this._config.baseurl}/signin}`, {
+      method: 'POST',
+      headers: this._config.headers,
+    }).then((res) => {
+      return _checkResponse(res);
+    })
+  }
+
+  requestRegister({email, password}) {
+    return fetch(`${this._config.baseurl}/signup}`, {
+      method: 'POST',
+      headers: this._config.headers,
+    }).then((res) => {
+      return _checkResponse(res);
+    })
+  }
+
   requestLike(cardId) {
     return fetch(`${this._config.baseUrl}/cards/likes/${cardId}`, {
       method: 'PUT',

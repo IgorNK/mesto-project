@@ -1,0 +1,4 @@
+.header__profile-actions {
+  display: flex;
+  flex-direction: row;
+}

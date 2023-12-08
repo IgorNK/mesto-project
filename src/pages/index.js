@@ -49,6 +49,16 @@ function addEventListeners() {
     popups.addPlace.open();
   });
 
+  const loginButton = document.querySelector('.header__sign-in-button');
+  loginButton.addEventListener('click', () => {
+    popups.login.open();
+  });
+
+  const registerButton = document.querySelector('.header__register-button');
+  registerButton.addEventListener('click', () => {
+    popups.register.open();
+  })
+
   document.addEventListener('mouseup', (evt) => {
     const target = evt.target;
     if (target.classList.contains('popup')) {
@@ -62,20 +72,42 @@ function populateProfileEditInputs() {
 }
 
 function renderPage() {
-  Promise.all([api.getUserProfile(), api.getInitialCards()])
-    .then(([profileData, cardsData]) => {
-      userInfo.setUserInfo({
-        name: profileData.name,
-        about: profileData.about,
-        _id: profileData._id,
-      });
-      userInfo.setUserAvatar(profileData.avatar);
-      sections.cards = createCards(cardsData);
+  api.getInitialCards()
+    .then((cards) => {
+      sections.cards = createCards(cards);
       sections.cards.renderItems();
     })
     .catch((err) => {
-      console.log(`ERROR RENDERING PAGE: ${err} \n ${err.stack}`);
-    });
+      console.log(`ERROR GETTING CARDS: ${err}`);
+    })
+
+  api.getUserProfile()
+    .then((profile) => {
+      userInfo.seetUserInfo({
+        name: profile.name,
+        about: profile.about,
+        _id: profile._id,
+      });
+      userInfo.setUserAvatar(profileData.avatar);
+    })
+    .catch((err) => {
+      console.log(`ERROR GETTING PROFILE: ${err}`);
+    })
+  
+  // Promise.all([api.getUserProfile(), api.getInitialCards()])
+  //   .then(([profileData, cardsData]) => {
+  //     userInfo.setUserInfo({
+  //       name: profileData.name,
+  //       about: profileData.about,
+  //       _id: profileData._id,
+  //     });
+  //     userInfo.setUserAvatar(profileData.avatar);
+  //     sections.cards = createCards(cardsData);
+  //     sections.cards.renderItems();
+  //   })
+  //   .catch((err) => {
+  //     console.log(`ERROR RENDERING PAGE: ${err} \n ${err.stack}`);
+  //   });
 }
 
 function initPopups(popups, selectors) {
@@ -120,6 +152,22 @@ function initPopups(popups, selectors) {
         });
         assignValidator(newPopup).enableValidation();
         break;
+      case 'login':
+        newPopup = new PopupWithForm(selectors[popupName], {
+          formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleLoginFormSubmit.bind(newPopup),
+        });
+        assignValidator(newPopup).enableValidation();
+      case 'register':
+        newPopup = new PopupWithForm(selectors[popupName], {
+          formElementSelectors: formElementSelectors,
+        });
+        newPopup.assignCallback({
+          callback: handleRegisterFormSubmit.bind(newPopup),
+        });
+        assignValidator(newPopup).enableValidation();
     }
     popups[popupName] = newPopup;
   });
@@ -229,6 +277,36 @@ function handleDeletePlaceFormSubmit(card) {
     .then(() => {
       this.onProcessingComplete();
     });
+}
+
+function handleLoginFormSubmit(values) {
+  api
+    .requestLogin({ email: values.email, password: values.password })
+    .then((user) => {
+      userInfo.setUserInfo(user);
+      this.close();
+    })
+    .catch((err) => {
+      console.log(`LOGIN ERROR: ${err} \n ${err.stack}`);
+    })
+    .then(() => {
+      this.onProcessingComplete();
+    });
+}
+
+function handleRegisterFormSubmit(values) {
+  api
+  .requestRegister({ email: values.email, password: values.password })
+  .then((user) => {
+    userInfo.setUserInfo(user);
+    this.close();
+  })
+  .catch((err) => {
+    console.log(`LOGIN ERROR: ${err} \n ${err.stack}`);
+  })
+  .then(() => {
+    this.onProcessingComplete();
+  });
 }
 
 // ********* CARD CALLBACKS ******** //
