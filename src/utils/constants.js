@@ -26,11 +26,7 @@ const defaultConfirmMessage = 'Да';
 
 const apiconfig = {
   //baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
-  baseUrl: 'https://mesto-project-plus.metsysfhtagn.repl.co',
-  headers: {
-    authorization: 'aeccfdf1-17cb-4e9d-8818-d4f10c28a16b',
-    'Content-type': 'application/json',
-  },
+  baseUrl: 'https://mesto-project-plus.metsysfhtagn.repl.co'
 };
 
 const userInfoSelectors = {

@@ -72,15 +72,6 @@ function populateProfileEditInputs() {
 }
 
 function renderPage() {
-  api.getInitialCards()
-    .then((cards) => {
-      sections.cards = createCards(cards);
-      sections.cards.renderItems();
-    })
-    .catch((err) => {
-      console.log(`ERROR GETTING CARDS: ${err}`);
-    })
-
   api.getUserProfile()
     .then((profile) => {
       userInfo.seetUserInfo({
@@ -92,6 +83,15 @@ function renderPage() {
     })
     .catch((err) => {
       console.log(`ERROR GETTING PROFILE: ${err}`);
+    })
+  
+  api.getInitialCards()
+    .then((cards) => {
+      sections.cards = createCards(cards);
+      sections.cards.renderItems();
+    })
+    .catch((err) => {
+      console.log(`ERROR GETTING CARDS: ${err}`);
     })
   
   // Promise.all([api.getUserProfile(), api.getInitialCards()])
@@ -160,6 +160,7 @@ function initPopups(popups, selectors) {
           callback: handleLoginFormSubmit.bind(newPopup),
         });
         assignValidator(newPopup).enableValidation();
+        break;
       case 'register':
         newPopup = new PopupWithForm(selectors[popupName], {
           formElementSelectors: formElementSelectors,
@@ -168,6 +169,7 @@ function initPopups(popups, selectors) {
           callback: handleRegisterFormSubmit.bind(newPopup),
         });
         assignValidator(newPopup).enableValidation();
+        break;
     }
     popups[popupName] = newPopup;
   });
@@ -280,6 +282,7 @@ function handleDeletePlaceFormSubmit(card) {
 }
 
 function handleLoginFormSubmit(values) {
+  console.log('login form submit');
   api
     .requestLogin({ email: values.email, password: values.password })
     .then((user) => {
@@ -295,6 +298,7 @@ function handleLoginFormSubmit(values) {
 }
 
 function handleRegisterFormSubmit(values) {
+  console.log('register form submit');
   api
   .requestRegister({ email: values.email, password: values.password })
   .then((user) => {

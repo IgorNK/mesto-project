@@ -1,73 +1,88 @@
 export default class Api {
   constructor(options) {
     this._config = options;
-  }
+  }  
 
   getInitialCards() {
-    return fetch(`${this._config.baseUrl}/cards`, {
-      headers: this._config.headers,
-    }).then((res) => {
+    return fetch(`${this._config.baseUrl}/cards`).then((res) => {
       return _checkResponse(res);
     });
   }
 
   getUserProfile() {
-    return fetch(`${this._config.baseUrl}/users/me`, {
-      headers: this._config.headers,
-    }).then((res) => {
+    return fetchWithAuth(`${this._config.baseUrl}/users/me`).then((res) => {
       return _checkResponse(res);
     });
   }
 
-  requestLogin({email, password}) {
-    return fetch(`${this._config.baseurl}/signin}`, {
+  requestLogin(values) {
+    console.log('login credentials: ');
+    console.log(values);
+    return fetch(`${this._config.baseUrl}/signin`, {
+      mode: 'cors',
       method: 'POST',
-      headers: this._config.headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: values.email, password: values.password }),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(res.status);
+      }
+    }).then((res) => {
+      setCookie("authentication", res.token);
+      return fetchWithAuth(`${this._config.baseUrl}/users/me`)
     }).then((res) => {
       return _checkResponse(res);
     })
   }
 
-  requestRegister({email, password}) {
-    return fetch(`${this._config.baseurl}/signup}`, {
+  requestRegister(values) {
+    return fetch(`${this._config.baseUrl}/signup`, {
+      mode: 'cors',
       method: 'POST',
-      headers: this._config.headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: values.email, password: values.password }),
     }).then((res) => {
       return _checkResponse(res);
     })
+  }
+
+  requestLogout() {
+    return deleteCookie("jwt");
   }
 
   requestLike(cardId) {
-    return fetch(`${this._config.baseUrl}/cards/likes/${cardId}`, {
+    return fetchWithAuth(`${this._config.baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
-      headers: this._config.headers,
     }).then((res) => {
       return _checkResponse(res);
     });
   }
 
   requestUnlike(cardId) {
-    return fetch(`${this._config.baseUrl}/cards/likes/${cardId}`, {
+    return fetchWithAuth(`${this._config.baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
-      headers: this._config.headers,
     }).then((res) => {
       return _checkResponse(res);
     });
   }
 
   requestDeletePlace(cardId) {
-    return fetch(`${this._config.baseUrl}/cards/${cardId}`, {
+    return fetchWithAuth(`${this._config.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
-      headers: this._config.headers,
     }).then((res) => {
       return _checkResponse(res);
     });
   }
 
   requestUpdateAvatar(link) {
-    return fetch(`${this._config.baseUrl}/users/me/avatar`, {
+    return fetchWithAuth(`${this._config.baseUrl}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this._config.headers,
       body: JSON.stringify({
         avatar: link,
       }),
@@ -77,9 +92,8 @@ export default class Api {
   }
 
   requestAddPlace(place) {
-    return fetch(`${this._config.baseUrl}/cards`, {
+    return fetchWithAuth(`${this._config.baseUrl}/cards`, {
       method: 'POST',
-      headers: this._config.headers,
       body: JSON.stringify({
         name: place.title,
         link: place.link,
@@ -90,9 +104,8 @@ export default class Api {
   }
 
   requestUpdateProfileData({ username, description }) {
-    return fetch(`${this._config.baseUrl}/users/me`, {
+    return fetchWithAuth(`${this._config.baseUrl}/users/me`, {
       method: 'PATCH',
-      headers: this._config.headers,
       body: JSON.stringify({
         name: username,
         about: description,
@@ -108,4 +121,52 @@ function _checkResponse(res) {
     return res.json();
   }
   return Promise.reject(res.status);
+}
+
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options = {}) {
+  options = {
+    path: '/',
+    ...options
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+function deleteCookie(name) {
+  setCookie(name, "", {
+    'max-age': -1
+  })
+}
+
+function fetchWithAuth(url, options = {}) {
+  const auth = getCookie("authentication");
+  return fetch(url, {
+    mode: 'cors',
+    headers: {
+      'Authorization': auth ? `Bearer ${auth}` : null,
+      'Content-Type': 'application/json',
+    },
+    ...options
+  });
 }
