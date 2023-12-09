@@ -17,6 +17,7 @@ import {
   defaultCardSelector,
   apiconfig,
   userInfoSelectors,
+  authRequiredElementSelectors,
   sections,
   popups,
 } from '../utils/constants.js';
@@ -32,7 +33,7 @@ function initialize() {
 
 function addEventListeners() {
   const avatarEditButton = document.querySelector(
-    '.profile__avatar-edit-button'
+    '.profile__avatar-edit-button',
   );
   avatarEditButton.addEventListener('click', () => {
     popups.avatarEdit.open();
@@ -57,7 +58,13 @@ function addEventListeners() {
   const registerButton = document.querySelector('.header__register-button');
   registerButton.addEventListener('click', () => {
     popups.register.open();
-  })
+  });
+
+  const logoutButton = document.querySelector('.header__logout-button');
+  logoutButton.addEventListener('click', () => {
+    handleLogout();
+    location.reload();
+  });
 
   document.addEventListener('mouseup', (evt) => {
     const target = evt.target;
@@ -72,28 +79,30 @@ function populateProfileEditInputs() {
 }
 
 function renderPage() {
-  api.getUserProfile()
+  api
+    .getUserProfile()
     .then((profile) => {
-      userInfo.seetUserInfo({
+      userInfo.setUserInfo({
         name: profile.name,
         about: profile.about,
         _id: profile._id,
       });
-      userInfo.setUserAvatar(profileData.avatar);
+      userInfo.setUserAvatar(profile.avatar);
     })
     .catch((err) => {
       console.log(`ERROR GETTING PROFILE: ${err}`);
-    })
-  
-  api.getInitialCards()
+    });
+
+  api
+    .getInitialCards()
     .then((cards) => {
       sections.cards = createCards(cards);
       sections.cards.renderItems();
     })
     .catch((err) => {
       console.log(`ERROR GETTING CARDS: ${err}`);
-    })
-  
+    });
+
   // Promise.all([api.getUserProfile(), api.getInitialCards()])
   //   .then(([profileData, cardsData]) => {
   //     userInfo.setUserInfo({
@@ -108,6 +117,19 @@ function renderPage() {
   //   .catch((err) => {
   //     console.log(`ERROR RENDERING PAGE: ${err} \n ${err.stack}`);
   //   });
+}
+
+function setElementsVisibility(selectors, value) {
+  Array.from(Object.values(selectors)).forEach((selector) => {
+    console.log(`hiding by selector: ${selector}`);
+    const element = document.querySelector(selector);
+    console.log(element);
+    if (value === false) {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
+  });
 }
 
 function initPopups(popups, selectors) {
@@ -186,10 +208,10 @@ function createCards(newCards) {
     {
       items: newCards,
       render: (item) => {
-        cards.container.append(createCardElement(item));
+        cards.container.prepend(createCardElement(item));
       },
     },
-    cardContainerSelector
+    cardContainerSelector,
   );
   return cards;
 }
@@ -287,6 +309,7 @@ function handleLoginFormSubmit(values) {
     .requestLogin({ email: values.email, password: values.password })
     .then((user) => {
       userInfo.setUserInfo(user);
+      userInfo.setUserAvatar(user.avatar);
       this.close();
     })
     .catch((err) => {
@@ -300,17 +323,22 @@ function handleLoginFormSubmit(values) {
 function handleRegisterFormSubmit(values) {
   console.log('register form submit');
   api
-  .requestRegister({ email: values.email, password: values.password })
-  .then((user) => {
-    userInfo.setUserInfo(user);
-    this.close();
-  })
-  .catch((err) => {
-    console.log(`LOGIN ERROR: ${err} \n ${err.stack}`);
-  })
-  .then(() => {
-    this.onProcessingComplete();
-  });
+    .requestRegister({ email: values.email, password: values.password })
+    .then((user) => {
+      userInfo.setUserInfo(user);
+      this.close();
+    })
+    .catch((err) => {
+      console.log(`LOGIN ERROR: ${err} \n ${err.stack}`);
+    })
+    .then(() => {
+      this.onProcessingComplete();
+    });
+}
+
+function handleLogout() {
+  console.log('logout');
+  api.requestLogout();
 }
 
 // ********* CARD CALLBACKS ******** //

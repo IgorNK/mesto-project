@@ -13,6 +13,7 @@
 @import url(../blocks/header/__profile-actions/header__profile-actions.css);
 @import url(../blocks/header/__register-button/header__register-button.css);
 @import url(../blocks/header/__sign-in-button/header__sign-in-button.css);
+@import url(../blocks/header/__logout-button/header__logout-button.css);
 /* ====================== */
 
 /* =======Profile========= */

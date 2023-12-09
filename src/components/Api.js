@@ -1,7 +1,7 @@
 export default class Api {
   constructor(options) {
     this._config = options;
-  }  
+  }
 
   getInitialCards() {
     return fetch(`${this._config.baseUrl}/cards`).then((res) => {
@@ -16,27 +16,29 @@ export default class Api {
   }
 
   requestLogin(values) {
-    console.log('login credentials: ');
-    console.log(values);
     return fetch(`${this._config.baseUrl}/signin`, {
       mode: 'cors',
       method: 'POST',
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email: values.email, password: values.password }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(res.status);
-      }
-    }).then((res) => {
-      setCookie("authentication", res.token);
-      return fetchWithAuth(`${this._config.baseUrl}/users/me`)
-    }).then((res) => {
-      return _checkResponse(res);
     })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return Promise.reject(res.status);
+        }
+      })
+      .then((res) => {
+        setCookie('auth', res.token);
+        return fetchWithAuth(`${this._config.baseUrl}/users/me`);
+      })
+      .then((res) => {
+        return _checkResponse(res);
+      });
   }
 
   requestRegister(values) {
@@ -44,16 +46,17 @@ export default class Api {
       mode: 'cors',
       method: 'POST',
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email: values.email, password: values.password }),
     }).then((res) => {
       return _checkResponse(res);
-    })
+    });
   }
 
   requestLogout() {
-    return deleteCookie("jwt");
+    return deleteCookie('auth');
   }
 
   requestLike(cardId) {
@@ -124,29 +127,34 @@ function _checkResponse(res) {
 }
 
 function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
+  let matches = document.cookie.match(
+    new RegExp(
+      '(?:^|; )' +
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
+        '=([^;]*)',
+    ),
+  );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 function setCookie(name, value, options = {}) {
   options = {
     path: '/',
-    ...options
+    ...options,
   };
 
   if (options.expires instanceof Date) {
     options.expires = options.expires.toUTCString();
   }
 
-  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  let updatedCookie =
+    encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
   for (let optionKey in options) {
-    updatedCookie += "; " + optionKey;
+    updatedCookie += '; ' + optionKey;
     let optionValue = options[optionKey];
     if (optionValue !== true) {
-      updatedCookie += "=" + optionValue;
+      updatedCookie += '=' + optionValue;
     }
   }
 
@@ -154,19 +162,20 @@ function setCookie(name, value, options = {}) {
 }
 
 function deleteCookie(name) {
-  setCookie(name, "", {
-    'max-age': -1
-  })
+  setCookie(name, '', {
+    'max-age': -1,
+  });
 }
 
 function fetchWithAuth(url, options = {}) {
-  const auth = getCookie("authentication");
+  const auth = getCookie('auth');
   return fetch(url, {
     mode: 'cors',
     headers: {
-      'Authorization': auth ? `Bearer ${auth}` : null,
+      'Access-Control-Allow-Origin': '*',
+      Authorization: auth ? `Bearer ${auth}` : null,
       'Content-Type': 'application/json',
     },
-    ...options
+    ...options,
   });
 }

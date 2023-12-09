@@ -26,13 +26,21 @@ const defaultConfirmMessage = 'Да';
 
 const apiconfig = {
   //baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-21',
-  baseUrl: 'https://mesto-project-plus.metsysfhtagn.repl.co'
+  // baseUrl: 'https://mesto-project-plus.metsysfhtagn.repl.co'
+  baseUrl: 'http://localhost:3000',
 };
 
 const userInfoSelectors = {
   nameSelector: '.profile__name',
   aboutSelector: '.profile__description',
   avatarSelector: '.profile__avatar-edit-button',
+};
+
+const authRequiredElementSelectors = {
+  avatarEditSelector: '.profile__avatar-edit-button',
+  profileEditSelector: '.profile__edit-button',
+  addButtonSelector: '.profile__add-button',
+  logoutSelector: '.header__logout-button',
 };
 
 let sections = {
@@ -50,6 +58,7 @@ export {
   defaultConfirmMessage,
   apiconfig,
   userInfoSelectors,
+  authRequiredElementSelectors,
   sections,
   popups,
 };
